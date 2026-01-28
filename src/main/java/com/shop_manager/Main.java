@@ -1,12 +1,16 @@
 package com.shop_manager;
 
 import com.shop_manager.models.Cashier;
+import com.shop_manager.models.Product;
 import com.shop_manager.models.Receipt;
 import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.enums.ProductCategory;
 import com.shop_manager.repositories.CashierRepository;
+import com.shop_manager.repositories.ProductRepository;
 import com.shop_manager.repositories.ReceiptRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +18,23 @@ import java.util.List;
 public class Main
 {
     public static void main(String[] args) {
-        CashierRepository cr = CashierRepository.getInstance();
-        ReceiptRepository rr = ReceiptRepository.getInstance();
-        cr.addCashier(new Cashier("Asd", BigDecimal.valueOf(1000)));
-        cr.getAllCashiers().forEach(System.out::println);
+        ProductRepository pr = ProductRepository.getInstance();
 
-        Cashier savedCashier = cr.getCashierById(1L);
-        List<ReceiptItem> items = new ArrayList<>();
-        rr.addReceipt(new Receipt(savedCashier, LocalDateTime.now(), items, BigDecimal.TEN));
-        rr.getAllReceipts().forEach(System.out::println);
+        Product p = new Product(
+            "Cheese",
+            BigDecimal.TEN,
+            LocalDate.now(),
+            ProductCategory.FOOD
+        );
+        Product p2 = new Product(
+            null,
+            BigDecimal.TEN,
+            LocalDate.now(),
+            ProductCategory.FOOD
+        );
+
+        pr.addProduct(p);
+        pr.addProduct(p2);
+        pr.getAllProducts().forEach(System.out::println);
     }
 }

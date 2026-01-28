@@ -1,29 +1,57 @@
 package com.shop_manager.models;
 
 import com.shop_manager.models.enums.ProductCategory;
+import com.shop_manager.storage_engine.annotations.Length;
+import com.shop_manager.storage_engine.annotations.Min;
+import com.shop_manager.storage_engine.annotations.NotNull;
+import com.shop_manager.storage_engine.annotations.Unique;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public abstract class Product extends BaseModel {
+public class Product extends BaseModel {
+    @NotNull
+    @Length(min = 1, max = 255)
+    @Unique
     private final String name;
+
+    @NotNull
+    @Min(0)
     private final BigDecimal deliveryPrice;
+
+    @NotNull
     private final LocalDate expirationDate;
 
-    protected Product(
+    @NotNull
+    private final ProductCategory category;
+
+    public Product(
         long id,
         String name,
         BigDecimal deliveryPrice,
-        LocalDate expirationDate
+        LocalDate expirationDate,
+        ProductCategory category
     ) {
         super(id);
         this.name = name;
         this.deliveryPrice = deliveryPrice;
         this.expirationDate = expirationDate;
+        this.category = category;
     }
 
-    public abstract ProductCategory getCategory();
+    public Product(
+        String name,
+        BigDecimal deliveryPrice,
+        LocalDate expirationDate,
+        ProductCategory category
+    ) {
+        super(null);
+        this.name = name;
+        this.deliveryPrice = deliveryPrice;
+        this.expirationDate = expirationDate;
+        this.category = category;
+    }
 
     public boolean isExpired() {
         return expirationDate.isBefore(LocalDate.now());
@@ -43,5 +71,19 @@ public abstract class Product extends BaseModel {
 
     public LocalDate getExpirationDate() {
         return expirationDate;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+            "name='" + name + '\'' +
+            ", deliveryPrice=" + deliveryPrice +
+            ", expirationDate=" + expirationDate +
+            ", id=" + id +
+            '}';
     }
 }
