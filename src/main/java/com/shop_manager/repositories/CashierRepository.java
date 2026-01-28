@@ -20,16 +20,16 @@ public class CashierRepository {
         return instance;
     }
 
+    public void addCashier(Cashier cashier) {
+        cashiers.insert(cashier);
+    }
+
     public Cashier getCashierById(Long id) {
         return cashiers.get(id);
     }
 
     public List<Cashier> getAllCashiers() {
         return cashiers.all();
-    }
-
-    public void addCashier(Cashier cashier) {
-        cashiers.insert(cashier);
     }
 
     public void updateCashier(Cashier cashier) {
