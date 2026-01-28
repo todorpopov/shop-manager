@@ -1,20 +1,35 @@
 package com.shop_manager.models;
 
+import com.shop_manager.storage_engine.annotations.Length;
+import com.shop_manager.storage_engine.annotations.Min;
+import com.shop_manager.storage_engine.annotations.NotNull;
+import com.shop_manager.storage_engine.annotations.Unique;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Store extends BaseModel {
+    @NotNull
+    @Unique
+    @Length(min = 1, max = 255)
     private final String name;
 
+    @NotNull
+    @Min(0)
     private final double foodMarkupPercent;
+    @NotNull
+    @Min(0)
     private final double nonFoodMarkupPercent;
 
+    @NotNull
+    @Min(0)
     private final int daysBeforeExpirationForDiscount;
+    @NotNull
+    @Min(0)
     private final double discountPercent;
 
-    private final Map<Long, InventoryItem> inventory;
+    private final List<InventoryItem> inventory;
     private final List<Cashier> cashiers;
     private final List<Receipt> receipts;
 
@@ -27,8 +42,7 @@ public class Store extends BaseModel {
         double foodMarkupPercent,
         double nonFoodMarkupPercent,
         int daysBeforeExpirationForDiscount,
-        double discountPercent,
-        Map<Long, InventoryItem> inventory
+        double discountPercent
     ) {
         super(id);
         this.name = name;
@@ -36,9 +50,30 @@ public class Store extends BaseModel {
         this.nonFoodMarkupPercent = nonFoodMarkupPercent;
         this.daysBeforeExpirationForDiscount = daysBeforeExpirationForDiscount;
         this.discountPercent = discountPercent;
-        this.inventory = inventory;
+        this.inventory = new ArrayList<>();
         this.cashiers = new ArrayList<>();
         this.receipts = new ArrayList<>();
+        this.issuedReceiptsCount = 0;
+        this.turnover = BigDecimal.ZERO;
+    }
+
+    public Store(
+        String name,
+        double foodMarkupPercent,
+        double nonFoodMarkupPercent,
+        int daysBeforeExpirationForDiscount,
+        double discountPercent
+    ) {
+        super(null);
+        this.name = name;
+        this.foodMarkupPercent = foodMarkupPercent;
+        this.nonFoodMarkupPercent = nonFoodMarkupPercent;
+        this.daysBeforeExpirationForDiscount = daysBeforeExpirationForDiscount;
+        this.discountPercent = discountPercent;
+        this.inventory = new ArrayList<>();
+        this.cashiers = new ArrayList<>();
+        this.receipts = new ArrayList<>();
+        this.issuedReceiptsCount = 0;
         this.turnover = BigDecimal.ZERO;
     }
 
@@ -72,7 +107,7 @@ public class Store extends BaseModel {
         return discountPercent;
     }
 
-    public Map<Long, InventoryItem> getInventory() {
+    public List<InventoryItem> getInventory() {
         return inventory;
     }
 
@@ -90,5 +125,22 @@ public class Store extends BaseModel {
 
     public BigDecimal getTurnover() {
         return turnover;
+    }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", foodMarkupPercent=" + foodMarkupPercent +
+            ", nonFoodMarkupPercent=" + nonFoodMarkupPercent +
+            ", daysBeforeExpirationForDiscount=" + daysBeforeExpirationForDiscount +
+            ", discountPercent=" + discountPercent +
+            ", inventory=" + inventory +
+            ", cashiers=" + cashiers +
+            ", receipts=" + receipts +
+            ", issuedReceiptsCount=" + issuedReceiptsCount +
+            ", turnover=" + turnover +
+            '}';
     }
 }

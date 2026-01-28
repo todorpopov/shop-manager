@@ -1,13 +1,11 @@
 package com.shop_manager;
 
-import com.shop_manager.models.Cashier;
-import com.shop_manager.models.Product;
-import com.shop_manager.models.Receipt;
-import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.*;
 import com.shop_manager.models.enums.ProductCategory;
 import com.shop_manager.repositories.CashierRepository;
 import com.shop_manager.repositories.ProductRepository;
 import com.shop_manager.repositories.ReceiptRepository;
+import com.shop_manager.repositories.StoreRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,23 +16,16 @@ import java.util.List;
 public class Main
 {
     public static void main(String[] args) {
-        ProductRepository pr = ProductRepository.getInstance();
-
-        Product p = new Product(
-            "Cheese",
-            BigDecimal.TEN,
-            LocalDate.now(),
-            ProductCategory.FOOD
+        StoreRepository sr = StoreRepository.getInstance();
+        Store store = new Store(
+            10,
+            "Test Store",
+            0,
+            0,
+            0,
+            0
         );
-        Product p2 = new Product(
-            null,
-            BigDecimal.TEN,
-            LocalDate.now(),
-            ProductCategory.FOOD
-        );
-
-        pr.addProduct(p);
-        pr.addProduct(p2);
-        pr.getAllProducts().forEach(System.out::println);
+        sr.addStore(store);
+        sr.getAllStores().forEach(System.out::println);
     }
 }
