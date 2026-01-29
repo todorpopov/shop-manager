@@ -1,45 +1,44 @@
-package com.shop_manager.repositories;
+package com.shop_manager.services;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
 import com.shop_manager.exceptions.NotFoundException;
 import com.shop_manager.models.Receipt;
-import com.shop_manager.storage_engine.InMemoryDatabase;
-import com.shop_manager.storage_engine.InMemoryTable;
+import com.shop_manager.repositories.ReceiptRepository;
 
 import java.util.List;
 
-public class ReceiptRepository {
-    private static ReceiptRepository instance;
+public class ReceiptService {
+    private static ReceiptService instance;
 
-    private final InMemoryTable<Receipt> receipts = InMemoryDatabase.getInstance().receipts();
+    private final ReceiptRepository receiptRepository = ReceiptRepository.getInstance();
 
-    private ReceiptRepository() {}
+    private ReceiptService() {}
 
-    public static ReceiptRepository getInstance() {
-        if (instance == null) {
-            instance = new ReceiptRepository();
+    public static ReceiptService getInstance() {
+        if(instance == null) {
+            instance = new ReceiptService();
         }
         return instance;
     }
 
     public void addReceipt(Receipt receipt) throws AlreadyExistsException, ConstraintViolationException {
-        receipts.insert(receipt);
+        receiptRepository.addReceipt(receipt);
     }
 
     public Receipt getReceiptById(Long id) throws NotFoundException {
-        return receipts.get(id);
+        return receiptRepository.getReceiptById(id);
     }
 
     public List<Receipt> getAllReceipts() {
-        return receipts.all();
+        return receiptRepository.getAllReceipts();
     }
 
     public void updateReceipt(Receipt receipt) throws NotFoundException, ConstraintViolationException {
-        receipts.update(receipt);
+        receiptRepository.updateReceipt(receipt);
     }
 
     public void deleteReceipt(Long id) throws NotFoundException {
-        receipts.delete(id);
+        receiptRepository.deleteReceipt(id);
     }
 }

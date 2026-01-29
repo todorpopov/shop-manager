@@ -1,45 +1,44 @@
-package com.shop_manager.repositories;
+package com.shop_manager.services;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
 import com.shop_manager.exceptions.NotFoundException;
 import com.shop_manager.models.Product;
-import com.shop_manager.storage_engine.InMemoryDatabase;
-import com.shop_manager.storage_engine.InMemoryTable;
+import com.shop_manager.repositories.ProductRepository;
 
 import java.util.List;
 
-public class ProductRepository {
-    private static ProductRepository instance;
+public class ProductService {
+    private static ProductService instance;
 
-    private final InMemoryTable<Product> products = InMemoryDatabase.getInstance().products();
+    private final ProductRepository productRepository = ProductRepository.getInstance();
 
-    private ProductRepository() {}
+    private ProductService() {}
 
-    public static ProductRepository getInstance() {
-        if (instance == null) {
-            instance = new ProductRepository();
+    public static ProductService getInstance() {
+        if(instance == null) {
+            instance = new ProductService();
         }
         return instance;
     }
 
     public void addProduct(Product product) throws AlreadyExistsException, ConstraintViolationException {
-        products.insert(product);
+        productRepository.addProduct(product);
     }
 
     public Product getProductById(Long id) throws NotFoundException {
-        return products.get(id);
+        return productRepository.getProductById(id);
     }
 
     public List<Product> getAllProducts() {
-        return products.all();
+        return productRepository.getAllProducts();
     }
 
     public void updateProduct(Product product) throws NotFoundException, ConstraintViolationException {
-        products.update(product);
+        productRepository.updateProduct(product);
     }
 
     public void deleteProduct(Long id) throws NotFoundException {
-        products.delete(id);
+        productRepository.deleteProduct(id);
     }
 }

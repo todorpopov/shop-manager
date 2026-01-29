@@ -1,5 +1,8 @@
 package com.shop_manager.repositories;
 
+import com.shop_manager.exceptions.AlreadyExistsException;
+import com.shop_manager.exceptions.ConstraintViolationException;
+import com.shop_manager.exceptions.NotFoundException;
 import com.shop_manager.models.Cashier;
 import com.shop_manager.storage_engine.InMemoryTable;
 import com.shop_manager.storage_engine.InMemoryDatabase;
@@ -20,11 +23,11 @@ public class CashierRepository {
         return instance;
     }
 
-    public void addCashier(Cashier cashier) {
+    public void addCashier(Cashier cashier) throws AlreadyExistsException, ConstraintViolationException {
         cashiers.insert(cashier);
     }
 
-    public Cashier getCashierById(Long id) {
+    public Cashier getCashierById(Long id) throws NotFoundException {
         return cashiers.get(id);
     }
 
@@ -32,11 +35,11 @@ public class CashierRepository {
         return cashiers.all();
     }
 
-    public void updateCashier(Cashier cashier) {
+    public void updateCashier(Cashier cashier) throws NotFoundException, ConstraintViolationException {
         cashiers.update(cashier);
     }
 
-    public void deleteCashier(long id) {
+    public void deleteCashier(long id) throws NotFoundException {
         cashiers.delete(id);
     }
 }
