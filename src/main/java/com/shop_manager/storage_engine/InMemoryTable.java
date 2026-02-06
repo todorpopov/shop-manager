@@ -57,4 +57,9 @@ public final class InMemoryTable<T extends Identifiable> {
         }
         rows.remove(id);
     }
+
+    public void clear() {
+        rows.clear();
+        idGenerator.reset();
+    }
 }

@@ -23,4 +23,11 @@ public class InMemoryDatabase {
     public InMemoryTable<Receipt> receipts() { return receipts; }
     public InMemoryTable<Product> products() { return products; }
     public InMemoryTable<Store> stores() { return stores; }
+
+    public void clearAll() {
+        cashiers.clear();
+        receipts.clear();
+        products.clear();
+        stores.clear();
+    }
 }

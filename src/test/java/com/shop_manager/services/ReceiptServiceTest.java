@@ -1,0 +1,279 @@
+package com.shop_manager.services;
+
+import com.shop_manager.exceptions.AlreadyExistsException;
+import com.shop_manager.exceptions.ConstraintViolationException;
+import com.shop_manager.exceptions.NotFoundException;
+import com.shop_manager.models.Cashier;
+import com.shop_manager.models.Product;
+import com.shop_manager.models.Receipt;
+import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.enums.ProductCategory;
+import com.shop_manager.storage_engine.InMemoryDatabase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+
+class ReceiptServiceTest {
+
+    private ReceiptService receiptService;
+    private InMemoryDatabase database;
+
+    @BeforeEach
+    void setUp() {
+        receiptService = ReceiptService.getInstance();
+        database = InMemoryDatabase.getInstance();
+        database.clearAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        database.clearAll();
+    }
+
+    @Test
+    void testAddReceipt_Success() throws AlreadyExistsException, ConstraintViolationException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(
+            cashier,
+            LocalDateTime.now(),
+            items,
+            new BigDecimal("10.00")
+        );
+
+        receiptService.addReceipt(receipt);
+
+        assertNotNull(receipt.getId());
+        assertEquals(1L, receipt.getId());
+    }
+
+    @Test
+    void testAddReceipt_WithExplicitId() throws AlreadyExistsException, ConstraintViolationException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(
+            10L,
+            cashier,
+            LocalDateTime.now(),
+            items,
+            new BigDecimal("10.00")
+        );
+
+        receiptService.addReceipt(receipt);
+
+        assertEquals(10L, receipt.getId());
+    }
+
+    @Test
+    void testAddReceipt_ThrowsAlreadyExistsException() throws AlreadyExistsException, ConstraintViolationException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt1 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt2 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("15.00"));
+
+        receiptService.addReceipt(receipt1);
+
+        assertThrows(AlreadyExistsException.class, () -> receiptService.addReceipt(receipt2));
+    }
+
+    @Test
+    void testAddReceipt_ThrowsConstraintViolationException_NullCashier() {
+        List<ReceiptItem> items = new ArrayList<>();
+        Receipt receipt = new Receipt(
+            null,
+            LocalDateTime.now(),
+            items,
+            new BigDecimal("10.00")
+        );
+
+        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+    }
+
+    @Test
+    void testAddReceipt_ThrowsConstraintViolationException_NullItems() {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Receipt receipt = new Receipt(
+            cashier,
+            LocalDateTime.now(),
+            null,
+            new BigDecimal("10.00")
+        );
+
+        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+    }
+
+    @Test
+    void testAddReceipt_ThrowsConstraintViolationException_NegativeTotalAmount() {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        List<ReceiptItem> items = new ArrayList<>();
+        Receipt receipt = new Receipt(
+            cashier,
+            LocalDateTime.now(),
+            items,
+            new BigDecimal("-10.00")
+        );
+
+        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+    }
+
+    @Test
+    void testGetReceiptById_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        receiptService.addReceipt(receipt);
+        Long receiptId = receipt.getId();
+
+        Receipt retrieved = receiptService.getReceiptById(receiptId);
+
+        assertNotNull(retrieved);
+        assertEquals(receiptId, retrieved.getId());
+        assertEquals(cashier.getId(), retrieved.getCashier().getId());
+        assertEquals(new BigDecimal("10.00"), retrieved.getTotalAmount());
+        assertEquals(1, retrieved.getItems().size());
+    }
+
+    @Test
+    void testGetReceiptById_ThrowsNotFoundException() {
+        assertThrows(NotFoundException.class, () -> receiptService.getReceiptById(999L));
+    }
+
+    @Test
+    void testGetAllReceipts_Empty() {
+        List<Receipt> receipts = receiptService.getAllReceipts();
+
+        assertNotNull(receipts);
+        assertTrue(receipts.isEmpty());
+    }
+
+    @Test
+    void testGetAllReceipts_Multiple() throws AlreadyExistsException, ConstraintViolationException {
+        Cashier cashier1 = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Cashier cashier2 = new Cashier(2L, "Jane Smith", new BigDecimal("3000.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items1 = new ArrayList<>();
+        items1.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        List<ReceiptItem> items2 = new ArrayList<>();
+        items2.add(new ReceiptItem(product, 3, new BigDecimal("2.00")));
+
+        List<ReceiptItem> items3 = new ArrayList<>();
+        items3.add(new ReceiptItem(product, 10, new BigDecimal("2.00")));
+
+        Receipt receipt1 = new Receipt(cashier1, LocalDateTime.now(), items1, new BigDecimal("10.00"));
+        Receipt receipt2 = new Receipt(cashier2, LocalDateTime.now(), items2, new BigDecimal("6.00"));
+        Receipt receipt3 = new Receipt(cashier1, LocalDateTime.now(), items3, new BigDecimal("20.00"));
+
+        receiptService.addReceipt(receipt1);
+        receiptService.addReceipt(receipt2);
+        receiptService.addReceipt(receipt3);
+
+        List<Receipt> receipts = receiptService.getAllReceipts();
+
+        assertNotNull(receipts);
+        assertEquals(3, receipts.size());
+    }
+
+    @Test
+    void testUpdateReceipt_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        receiptService.addReceipt(receipt);
+        Long receiptId = receipt.getId();
+
+        List<ReceiptItem> updatedItems = new ArrayList<>();
+        updatedItems.add(new ReceiptItem(product, 10, new BigDecimal("2.00")));
+
+        Receipt updatedReceipt = new Receipt(
+            receiptId,
+            cashier,
+            LocalDateTime.now(),
+            updatedItems,
+            new BigDecimal("20.00")
+        );
+        receiptService.updateReceipt(updatedReceipt);
+
+        Receipt retrieved = receiptService.getReceiptById(receiptId);
+        assertEquals(new BigDecimal("20.00"), retrieved.getTotalAmount());
+    }
+
+    @Test
+    void testUpdateReceipt_ThrowsNotFoundException() {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        List<ReceiptItem> items = new ArrayList<>();
+        Receipt receipt = new Receipt(999L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+
+        assertThrows(NotFoundException.class, () -> receiptService.updateReceipt(receipt));
+    }
+
+    @Test
+    void testUpdateReceipt_ThrowsConstraintViolationException() throws AlreadyExistsException, ConstraintViolationException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        receiptService.addReceipt(receipt);
+        Long receiptId = receipt.getId();
+
+        Receipt invalidUpdate = new Receipt(receiptId, cashier, LocalDateTime.now(), items, new BigDecimal("-5.00"));
+        assertThrows(ConstraintViolationException.class, () -> receiptService.updateReceipt(invalidUpdate));
+    }
+
+    @Test
+    void testDeleteReceipt_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
+        Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
+
+        List<ReceiptItem> items = new ArrayList<>();
+        items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
+
+        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        receiptService.addReceipt(receipt);
+        Long receiptId = receipt.getId();
+
+        receiptService.deleteReceipt(receiptId);
+
+        assertThrows(NotFoundException.class, () -> receiptService.getReceiptById(receiptId));
+        assertEquals(0, receiptService.getAllReceipts().size());
+    }
+
+    @Test
+    void testDeleteReceipt_ThrowsNotFoundException() {
+        assertThrows(NotFoundException.class, () -> receiptService.deleteReceipt(999L));
+    }
+}
+

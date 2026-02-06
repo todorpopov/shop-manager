@@ -34,7 +34,7 @@ public final class EntityValidator {
             Length length = f.getAnnotation(Length.class);
             if (length != null && value != null) {
                 if (!(value instanceof String s)) {
-                    throw new ConstraintViolationException("[" + entity.getClass().getSimpleName() + "." + f.getName() + "] @Size can only be used on String");
+                    throw new ConstraintViolationException("[" + entity.getClass().getSimpleName() + "." + f.getName() + "] @Length can only be used on String");
                 }
                 if (s.length() < length.min() || s.length() > length.max()) {
                     throw new ConstraintViolationException("[" + entity.getClass().getSimpleName() + "." + f.getName() + "] length must be between " + length.min() + " and " + length.max());

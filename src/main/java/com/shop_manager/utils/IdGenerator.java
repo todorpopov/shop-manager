@@ -8,4 +8,8 @@ public class IdGenerator {
     public Long nextId() {
         return seq.incrementAndGet();
     }
+
+    public void reset() {
+        seq.set(0);
+    }
 }
