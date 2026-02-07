@@ -82,6 +82,10 @@ public class Store extends BaseModel {
         cashiers.add(cashier);
     }
 
+    public void addInventoryItem(InventoryItem inventoryItem) {
+        inventory.add(inventoryItem);
+    }
+
     public void addReceipt(Receipt receipt) {
         receipts.add(receipt);
         issuedReceiptsCount++;
