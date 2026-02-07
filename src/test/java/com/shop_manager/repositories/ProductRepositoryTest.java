@@ -1,4 +1,4 @@
-package com.shop_manager.services;
+package com.shop_manager.repositories;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
@@ -17,14 +17,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ProductServiceTest {
+class ProductRepositoryTest {
 
-    private ProductService productService;
+    private ProductRepository productRepository;
     private InMemoryDatabase database;
 
     @BeforeEach
     void setUp() {
-        productService = ProductService.getInstance();
+        productRepository = ProductRepository.getInstance();
         database = InMemoryDatabase.getInstance();
         database.clearAll();
     }
@@ -43,7 +43,7 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        productService.addProduct(product);
+        productRepository.addProduct(product);
 
         assertNotNull(product.getId());
         assertEquals(1L, product.getId());
@@ -59,7 +59,7 @@ class ProductServiceTest {
             ProductCategory.NON_FOOD
         );
 
-        productService.addProduct(product);
+        productRepository.addProduct(product);
 
         assertEquals(10L, product.getId());
     }
@@ -81,9 +81,9 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        productService.addProduct(product1);
+        productRepository.addProduct(product1);
 
-        assertThrows(AlreadyExistsException.class, () -> productService.addProduct(product2));
+        assertThrows(AlreadyExistsException.class, () -> productRepository.addProduct(product2));
     }
 
     @Test
@@ -101,9 +101,9 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        productService.addProduct(product1);
+        productRepository.addProduct(product1);
 
-        assertThrows(ConstraintViolationException.class, () -> productService.addProduct(product2));
+        assertThrows(ConstraintViolationException.class, () -> productRepository.addProduct(product2));
     }
 
     @Test
@@ -115,7 +115,7 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        assertThrows(ConstraintViolationException.class, () -> productService.addProduct(product));
+        assertThrows(ConstraintViolationException.class, () -> productRepository.addProduct(product));
     }
 
     @Test
@@ -127,7 +127,7 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        assertThrows(ConstraintViolationException.class, () -> productService.addProduct(product));
+        assertThrows(ConstraintViolationException.class, () -> productRepository.addProduct(product));
     }
 
     @Test
@@ -139,7 +139,7 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        assertThrows(ConstraintViolationException.class, () -> productService.addProduct(product));
+        assertThrows(ConstraintViolationException.class, () -> productRepository.addProduct(product));
     }
 
     @Test
@@ -150,10 +150,10 @@ class ProductServiceTest {
             LocalDate.now().plusDays(30),
             ProductCategory.FOOD
         );
-        productService.addProduct(product);
+        productRepository.addProduct(product);
         Long productId = product.getId();
 
-        Product retrieved = productService.getProductById(productId);
+        Product retrieved = productRepository.getProductById(productId);
 
         assertNotNull(retrieved);
         assertEquals(productId, retrieved.getId());
@@ -164,12 +164,12 @@ class ProductServiceTest {
 
     @Test
     void testGetProductById_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> productService.getProductById(999L));
+        assertThrows(NotFoundException.class, () -> productRepository.getProductById(999L));
     }
 
     @Test
     void testGetAllProducts_Empty() {
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = productRepository.getAllProducts();
 
         assertNotNull(products);
         assertTrue(products.isEmpty());
@@ -181,11 +181,11 @@ class ProductServiceTest {
         Product product2 = new Product("Laptop", new BigDecimal("1200.00"), LocalDate.now().plusYears(2), ProductCategory.NON_FOOD);
         Product product3 = new Product("Banana", new BigDecimal("0.80"), LocalDate.now().plusDays(15), ProductCategory.FOOD);
 
-        productService.addProduct(product1);
-        productService.addProduct(product2);
-        productService.addProduct(product3);
+        productRepository.addProduct(product1);
+        productRepository.addProduct(product2);
+        productRepository.addProduct(product3);
 
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = productRepository.getAllProducts();
 
         assertNotNull(products);
         assertEquals(3, products.size());
@@ -199,7 +199,7 @@ class ProductServiceTest {
             LocalDate.now().plusDays(30),
             ProductCategory.FOOD
         );
-        productService.addProduct(product);
+        productRepository.addProduct(product);
         Long productId = product.getId();
 
         Product updatedProduct = new Product(
@@ -209,9 +209,9 @@ class ProductServiceTest {
             LocalDate.now().plusDays(45),
             ProductCategory.FOOD
         );
-        productService.updateProduct(updatedProduct);
+        productRepository.updateProduct(updatedProduct);
 
-        Product retrieved = productService.getProductById(productId);
+        Product retrieved = productRepository.getProductById(productId);
         assertEquals(new BigDecimal("2.00"), retrieved.getDeliveryPrice());
     }
 
@@ -225,7 +225,7 @@ class ProductServiceTest {
             ProductCategory.FOOD
         );
 
-        assertThrows(NotFoundException.class, () -> productService.updateProduct(product));
+        assertThrows(NotFoundException.class, () -> productRepository.updateProduct(product));
     }
 
     @Test
@@ -236,7 +236,7 @@ class ProductServiceTest {
             LocalDate.now().plusDays(30),
             ProductCategory.FOOD
         );
-        productService.addProduct(product);
+        productRepository.addProduct(product);
         Long productId = product.getId();
 
         Product invalidUpdate = new Product(
@@ -246,7 +246,7 @@ class ProductServiceTest {
             LocalDate.now().plusDays(30),
             ProductCategory.FOOD
         );
-        assertThrows(ConstraintViolationException.class, () -> productService.updateProduct(invalidUpdate));
+        assertThrows(ConstraintViolationException.class, () -> productRepository.updateProduct(invalidUpdate));
     }
 
     @Test
@@ -257,18 +257,17 @@ class ProductServiceTest {
             LocalDate.now().plusDays(30),
             ProductCategory.FOOD
         );
-        productService.addProduct(product);
+        productRepository.addProduct(product);
         Long productId = product.getId();
 
-        productService.deleteProduct(productId);
+        productRepository.deleteProduct(productId);
 
-        assertThrows(NotFoundException.class, () -> productService.getProductById(productId));
-        assertEquals(0, productService.getAllProducts().size());
+        assertThrows(NotFoundException.class, () -> productRepository.getProductById(productId));
+        assertEquals(0, productRepository.getAllProducts().size());
     }
 
     @Test
     void testDeleteProduct_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> productService.deleteProduct(999L));
+        assertThrows(NotFoundException.class, () -> productRepository.deleteProduct(999L));
     }
 }
-

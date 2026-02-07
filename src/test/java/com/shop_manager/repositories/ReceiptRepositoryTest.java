@@ -1,4 +1,4 @@
-package com.shop_manager.services;
+package com.shop_manager.repositories;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
@@ -22,14 +22,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class ReceiptServiceTest {
+class ReceiptRepositoryTest {
 
-    private ReceiptService receiptService;
+    private ReceiptRepository receiptRepository;
     private InMemoryDatabase database;
 
     @BeforeEach
     void setUp() {
-        receiptService = ReceiptService.getInstance();
+        receiptRepository = ReceiptRepository.getInstance();
         database = InMemoryDatabase.getInstance();
         database.clearAll();
     }
@@ -54,7 +54,7 @@ class ReceiptServiceTest {
             new BigDecimal("10.00")
         );
 
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
 
         assertNotNull(receipt.getId());
         assertEquals(1L, receipt.getId());
@@ -76,7 +76,7 @@ class ReceiptServiceTest {
             new BigDecimal("10.00")
         );
 
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
 
         assertEquals(10L, receipt.getId());
     }
@@ -92,9 +92,9 @@ class ReceiptServiceTest {
         Receipt receipt1 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
         Receipt receipt2 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("15.00"));
 
-        receiptService.addReceipt(receipt1);
+        receiptRepository.addReceipt(receipt1);
 
-        assertThrows(AlreadyExistsException.class, () -> receiptService.addReceipt(receipt2));
+        assertThrows(AlreadyExistsException.class, () -> receiptRepository.addReceipt(receipt2));
     }
 
     @Test
@@ -107,7 +107,7 @@ class ReceiptServiceTest {
             new BigDecimal("10.00")
         );
 
-        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+        assertThrows(ConstraintViolationException.class, () -> receiptRepository.addReceipt(receipt));
     }
 
     @Test
@@ -120,7 +120,7 @@ class ReceiptServiceTest {
             new BigDecimal("10.00")
         );
 
-        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+        assertThrows(ConstraintViolationException.class, () -> receiptRepository.addReceipt(receipt));
     }
 
     @Test
@@ -134,7 +134,7 @@ class ReceiptServiceTest {
             new BigDecimal("-10.00")
         );
 
-        assertThrows(ConstraintViolationException.class, () -> receiptService.addReceipt(receipt));
+        assertThrows(ConstraintViolationException.class, () -> receiptRepository.addReceipt(receipt));
     }
 
     @Test
@@ -146,10 +146,10 @@ class ReceiptServiceTest {
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
         Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
-        Receipt retrieved = receiptService.getReceiptById(receiptId);
+        Receipt retrieved = receiptRepository.getReceiptById(receiptId);
 
         assertNotNull(retrieved);
         assertEquals(receiptId, retrieved.getId());
@@ -160,12 +160,12 @@ class ReceiptServiceTest {
 
     @Test
     void testGetReceiptById_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> receiptService.getReceiptById(999L));
+        assertThrows(NotFoundException.class, () -> receiptRepository.getReceiptById(999L));
     }
 
     @Test
     void testGetAllReceipts_Empty() {
-        List<Receipt> receipts = receiptService.getAllReceipts();
+        List<Receipt> receipts = receiptRepository.getAllReceipts();
 
         assertNotNull(receipts);
         assertTrue(receipts.isEmpty());
@@ -190,11 +190,11 @@ class ReceiptServiceTest {
         Receipt receipt2 = new Receipt(cashier2, LocalDateTime.now(), items2, new BigDecimal("6.00"));
         Receipt receipt3 = new Receipt(cashier1, LocalDateTime.now(), items3, new BigDecimal("20.00"));
 
-        receiptService.addReceipt(receipt1);
-        receiptService.addReceipt(receipt2);
-        receiptService.addReceipt(receipt3);
+        receiptRepository.addReceipt(receipt1);
+        receiptRepository.addReceipt(receipt2);
+        receiptRepository.addReceipt(receipt3);
 
-        List<Receipt> receipts = receiptService.getAllReceipts();
+        List<Receipt> receipts = receiptRepository.getAllReceipts();
 
         assertNotNull(receipts);
         assertEquals(3, receipts.size());
@@ -209,7 +209,7 @@ class ReceiptServiceTest {
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
         Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
         List<ReceiptItem> updatedItems = new ArrayList<>();
@@ -222,9 +222,9 @@ class ReceiptServiceTest {
             updatedItems,
             new BigDecimal("20.00")
         );
-        receiptService.updateReceipt(updatedReceipt);
+        receiptRepository.updateReceipt(updatedReceipt);
 
-        Receipt retrieved = receiptService.getReceiptById(receiptId);
+        Receipt retrieved = receiptRepository.getReceiptById(receiptId);
         assertEquals(new BigDecimal("20.00"), retrieved.getTotalAmount());
     }
 
@@ -234,7 +234,7 @@ class ReceiptServiceTest {
         List<ReceiptItem> items = new ArrayList<>();
         Receipt receipt = new Receipt(999L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
 
-        assertThrows(NotFoundException.class, () -> receiptService.updateReceipt(receipt));
+        assertThrows(NotFoundException.class, () -> receiptRepository.updateReceipt(receipt));
     }
 
     @Test
@@ -246,11 +246,11 @@ class ReceiptServiceTest {
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
         Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
         Receipt invalidUpdate = new Receipt(receiptId, cashier, LocalDateTime.now(), items, new BigDecimal("-5.00"));
-        assertThrows(ConstraintViolationException.class, () -> receiptService.updateReceipt(invalidUpdate));
+        assertThrows(ConstraintViolationException.class, () -> receiptRepository.updateReceipt(invalidUpdate));
     }
 
     @Test
@@ -262,18 +262,17 @@ class ReceiptServiceTest {
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
         Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
-        receiptService.addReceipt(receipt);
+        receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
-        receiptService.deleteReceipt(receiptId);
+        receiptRepository.deleteReceipt(receiptId);
 
-        assertThrows(NotFoundException.class, () -> receiptService.getReceiptById(receiptId));
-        assertEquals(0, receiptService.getAllReceipts().size());
+        assertThrows(NotFoundException.class, () -> receiptRepository.getReceiptById(receiptId));
+        assertEquals(0, receiptRepository.getAllReceipts().size());
     }
 
     @Test
     void testDeleteReceipt_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> receiptService.deleteReceipt(999L));
+        assertThrows(NotFoundException.class, () -> receiptRepository.deleteReceipt(999L));
     }
 }
-

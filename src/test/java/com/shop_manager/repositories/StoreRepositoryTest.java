@@ -1,4 +1,4 @@
-package com.shop_manager.services;
+package com.shop_manager.repositories;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
@@ -14,14 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class StoreServiceTest {
+class StoreRepositoryTest {
 
-    private StoreService storeService;
+    private StoreRepository storeRepository;
     private InMemoryDatabase database;
 
     @BeforeEach
     void setUp() {
-        storeService = StoreService.getInstance();
+        storeRepository = StoreRepository.getInstance();
         database = InMemoryDatabase.getInstance();
         database.clearAll();
     }
@@ -41,7 +41,7 @@ class StoreServiceTest {
             10.0
         );
 
-        storeService.addStore(store);
+        storeRepository.addStore(store);
 
         assertNotNull(store.getId());
         assertEquals(1L, store.getId());
@@ -58,7 +58,7 @@ class StoreServiceTest {
             12.0
         );
 
-        storeService.addStore(store);
+        storeRepository.addStore(store);
 
         assertEquals(10L, store.getId());
     }
@@ -68,9 +68,9 @@ class StoreServiceTest {
         Store store1 = new Store(1L, "Main Store", 20.0, 15.0, 5, 10.0);
         Store store2 = new Store(1L, "Branch Store", 25.0, 18.0, 7, 12.0);
 
-        storeService.addStore(store1);
+        storeRepository.addStore(store1);
 
-        assertThrows(AlreadyExistsException.class, () -> storeService.addStore(store2));
+        assertThrows(AlreadyExistsException.class, () -> storeRepository.addStore(store2));
     }
 
     @Test
@@ -78,60 +78,60 @@ class StoreServiceTest {
         Store store1 = new Store("Main Store", 20.0, 15.0, 5, 10.0);
         Store store2 = new Store("Main Store", 25.0, 18.0, 7, 12.0);
 
-        storeService.addStore(store1);
+        storeRepository.addStore(store1);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store2));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store2));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_NullName() {
         Store store = new Store(null, 20.0, 15.0, 5, 10.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_EmptyName() {
         Store store = new Store("", 20.0, 15.0, 5, 10.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_NegativeFoodMarkup() {
         Store store = new Store("Main Store", -5.0, 15.0, 5, 10.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_NegativeNonFoodMarkup() {
         Store store = new Store("Main Store", 20.0, -10.0, 5, 10.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_NegativeDaysBeforeExpiration() {
         Store store = new Store("Main Store", 20.0, 15.0, -3, 10.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testAddStore_ThrowsConstraintViolationException_NegativeDiscount() {
         Store store = new Store("Main Store", 20.0, 15.0, 5, -5.0);
 
-        assertThrows(ConstraintViolationException.class, () -> storeService.addStore(store));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.addStore(store));
     }
 
     @Test
     void testGetStoreById_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
         Store store = new Store("Main Store", 20.0, 15.0, 5, 10.0);
-        storeService.addStore(store);
+        storeRepository.addStore(store);
         Long storeId = store.getId();
 
-        Store retrieved = storeService.getStoreById(storeId);
+        Store retrieved = storeRepository.getStoreById(storeId);
 
         assertNotNull(retrieved);
         assertEquals(storeId, retrieved.getId());
@@ -142,12 +142,12 @@ class StoreServiceTest {
 
     @Test
     void testGetStoreById_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> storeService.getStoreById(999L));
+        assertThrows(NotFoundException.class, () -> storeRepository.getStoreById(999L));
     }
 
     @Test
     void testGetAllStores_Empty() {
-        List<Store> stores = storeService.getAllStores();
+        List<Store> stores = storeRepository.getAllStores();
 
         assertNotNull(stores);
         assertTrue(stores.isEmpty());
@@ -159,11 +159,11 @@ class StoreServiceTest {
         Store store2 = new Store("Branch Store", 25.0, 18.0, 7, 12.0);
         Store store3 = new Store("Downtown Store", 22.0, 16.0, 6, 11.0);
 
-        storeService.addStore(store1);
-        storeService.addStore(store2);
-        storeService.addStore(store3);
+        storeRepository.addStore(store1);
+        storeRepository.addStore(store2);
+        storeRepository.addStore(store3);
 
-        List<Store> stores = storeService.getAllStores();
+        List<Store> stores = storeRepository.getAllStores();
 
         assertNotNull(stores);
         assertEquals(3, stores.size());
@@ -172,13 +172,13 @@ class StoreServiceTest {
     @Test
     void testUpdateStore_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
         Store store = new Store("Main Store", 20.0, 15.0, 5, 10.0);
-        storeService.addStore(store);
+        storeRepository.addStore(store);
         Long storeId = store.getId();
 
         Store updatedStore = new Store(storeId, "Main Store", 25.0, 20.0, 7, 15.0);
-        storeService.updateStore(updatedStore);
+        storeRepository.updateStore(updatedStore);
 
-        Store retrieved = storeService.getStoreById(storeId);
+        Store retrieved = storeRepository.getStoreById(storeId);
         assertEquals(25.0, retrieved.getFoodMarkupPercent());
         assertEquals(20.0, retrieved.getNonFoodMarkupPercent());
     }
@@ -187,34 +187,34 @@ class StoreServiceTest {
     void testUpdateStore_ThrowsNotFoundException() {
         Store store = new Store(999L, "Nonexistent", 20.0, 15.0, 5, 10.0);
 
-        assertThrows(NotFoundException.class, () -> storeService.updateStore(store));
+        assertThrows(NotFoundException.class, () -> storeRepository.updateStore(store));
     }
 
     @Test
     void testUpdateStore_ThrowsConstraintViolationException() throws AlreadyExistsException, ConstraintViolationException {
         Store store = new Store("Main Store", 20.0, 15.0, 5, 10.0);
-        storeService.addStore(store);
+        storeRepository.addStore(store);
         Long storeId = store.getId();
 
         Store invalidUpdate = new Store(storeId, "", 25.0, 20.0, 7, 15.0);
-        assertThrows(ConstraintViolationException.class, () -> storeService.updateStore(invalidUpdate));
+        assertThrows(ConstraintViolationException.class, () -> storeRepository.updateStore(invalidUpdate));
     }
 
     @Test
     void testDeleteStore_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
         Store store = new Store("Main Store", 20.0, 15.0, 5, 10.0);
-        storeService.addStore(store);
+        storeRepository.addStore(store);
         Long storeId = store.getId();
 
-        storeService.deleteStore(storeId);
+        storeRepository.deleteStore(storeId);
 
-        assertThrows(NotFoundException.class, () -> storeService.getStoreById(storeId));
-        assertEquals(0, storeService.getAllStores().size());
+        assertThrows(NotFoundException.class, () -> storeRepository.getStoreById(storeId));
+        assertEquals(0, storeRepository.getAllStores().size());
     }
 
     @Test
     void testDeleteStore_ThrowsNotFoundException() {
-        assertThrows(NotFoundException.class, () -> storeService.deleteStore(999L));
+        assertThrows(NotFoundException.class, () -> storeRepository.deleteStore(999L));
     }
 }
 
