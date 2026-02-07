@@ -2,10 +2,16 @@ package com.shop_manager.ui.enums;
 
 public enum ScreenName {
     MAIN_SCREEN,
+
+
     MANAGE_SCREEN,
+
     PRODUCT_MANAGE_SCREEN,
     CREATE_PRODUCT_SCREEN,
     VIEW_ALL_PRODUCTS_SCREEN,
+    UPDATE_PRODUCT_SCREEN,
+
+
     RECEIPT_LOADER_SCREEN,
     RECEIPT_RENDER_SCREEN
 }

@@ -40,9 +40,7 @@ public class ManageProductScreen extends BaseScreen {
                 waitForKey();
                 return this;
             case "4":
-                System.out.println("Update Product - Coming soon!");
-                waitForKey();
-                return this;
+                return screenManager.goToScreen(ScreenName.UPDATE_PRODUCT_SCREEN);
             case "5":
                 System.out.println("Delete Product - Coming soon!");
                 waitForKey();
