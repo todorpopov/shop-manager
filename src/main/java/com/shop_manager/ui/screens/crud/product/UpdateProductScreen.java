@@ -1,4 +1,4 @@
-package com.shop_manager.ui.screens;
+package com.shop_manager.ui.screens.crud.product;
 
 import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;

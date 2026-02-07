@@ -1,4 +1,4 @@
-package com.shop_manager.ui.screens;
+package com.shop_manager.ui.screens.receipt_loader;
 
 import com.shop_manager.models.Receipt;
 import com.shop_manager.models.ReceiptItem;

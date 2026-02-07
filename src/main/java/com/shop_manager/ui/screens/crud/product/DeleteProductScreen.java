@@ -1,4 +1,4 @@
-package com.shop_manager.ui.screens;
+package com.shop_manager.ui.screens.crud.product;
 
 import com.shop_manager.exceptions.NotFoundException;
 import com.shop_manager.models.Product;
