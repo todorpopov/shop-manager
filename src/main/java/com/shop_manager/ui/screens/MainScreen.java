@@ -31,21 +31,16 @@ public class MainScreen extends BaseScreen {
 
         switch (input) {
             case "1":
-                return screenManager.goToScreen(ScreenName.MANAGE);
-
+                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "2":
                 System.out.println("Enter Store menu - Coming soon!");
                 waitForKey();
                 return this;
             case "3":
-                System.out.println("Load Receipts menu - Coming soon!");
-                waitForKey();
-                return this;
-
+                return screenManager.goToScreen(ScreenName.RECEIPT_LOADER_SCREEN);
             case "4":
                 screenManager.stop();
                 return null;
-
             default:
                 System.out.println("Invalid option. Please try again.");
                 waitForKey();

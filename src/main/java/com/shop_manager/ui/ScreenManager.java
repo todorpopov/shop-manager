@@ -1,34 +1,32 @@
 package com.shop_manager.ui;
 
+import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.ui.enums.ScreenName;
 import com.shop_manager.ui.screens.MainScreen;
 import com.shop_manager.ui.screens.ManageScreen;
+import com.shop_manager.ui.screens.ReceiptLoaderScreen;
+import com.shop_manager.ui.screens.ReceiptRenderScreen;
 
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class ScreenManager {
-    private static ScreenManager instance;
     private Screen currentScreen;
     private final Scanner scanner;
     private boolean running;
-    private final HashMap<ScreenName, Screen> screens = new HashMap<>();;
+    private final HashMap<ScreenName, Screen> screens = new HashMap<>();
 
-    private ScreenManager() {
+    private final ReceiptLoaderService receiptLoaderService;
+
+    public ScreenManager(ReceiptLoaderService receiptLoaderService) {
         this.scanner = new Scanner(System.in);
         this.running = true;
+        this.receiptLoaderService = receiptLoaderService;
         initializeScreens();
     }
 
-    public static synchronized ScreenManager getInstance() {
-        if (instance == null) {
-            instance = new ScreenManager();
-        }
-        return instance;
-    }
-
     public void startUi() {
-        currentScreen = screens.get(ScreenName.MAIN);
+        currentScreen = screens.get(ScreenName.MAIN_SCREEN);
 
         while (running && currentScreen != null) {
             clearScreen();
@@ -68,8 +66,10 @@ public class ScreenManager {
     }
 
     private void initializeScreens() {
-        screens.put(ScreenName.MAIN, new MainScreen(this));
-        screens.put(ScreenName.MANAGE, new ManageScreen(this));
+        screens.put(ScreenName.MAIN_SCREEN, new MainScreen(this));
+        screens.put(ScreenName.MANAGE_SCREEN, new ManageScreen(this));
+        screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
+        screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
     }
 }
 

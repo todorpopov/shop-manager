@@ -42,7 +42,7 @@ public class ManageScreen extends BaseScreen {
                 waitForKey();
                 return this;
             case "4":
-                return screenManager.goToScreen(ScreenName.MAIN);
+                return screenManager.goToScreen(ScreenName.MAIN_SCREEN);
             default:
                 System.out.println("Invalid option. Please try again.");
                 waitForKey();
