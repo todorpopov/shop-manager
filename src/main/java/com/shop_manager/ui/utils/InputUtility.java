@@ -79,6 +79,30 @@ public class InputUtility {
         }
     }
 
+    public static LocalDate readOptionalDate(ScreenManager screenManager, String prompt) {
+        while (true) {
+            System.out.print(prompt + " (yyyy-mm-dd or press Enter to skip): ");
+            String input = screenManager.nextLine();
+
+            if (input.isBlank()) {
+                return null;
+            }
+
+            try {
+                LocalDate date = LocalDate.parse(input, DATE_FORMATTER);
+
+                if (date.isBefore(LocalDate.now())) {
+                    System.out.println("Error: Expiration date must be in the future.");
+                    continue;
+                }
+
+                return date;
+            } catch (DateTimeParseException e) {
+                System.out.println("Error: Please enter a valid date in the format yyyy-mm-dd or press Enter to skip.");
+            }
+        }
+    }
+
     public static <E extends Enum<E>> E readEnum(
         ScreenManager screenManager,
         String prompt,
@@ -123,4 +147,3 @@ public class InputUtility {
         }
     }
 }
-

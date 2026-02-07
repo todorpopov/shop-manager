@@ -34,9 +34,7 @@ public class ManageProductScreen extends BaseScreen {
             case "1":
                 return screenManager.goToScreen(ScreenName.CREATE_PRODUCT_SCREEN);
             case "2":
-                System.out.println("View All Products - Coming soon!");
-                waitForKey();
-                return this;
+                return screenManager.goToScreen(ScreenName.VIEW_ALL_PRODUCTS_SCREEN);
             case "3":
                 System.out.println("View Product by ID - Coming soon!");
                 waitForKey();

@@ -20,7 +20,6 @@ public class Product extends BaseModel {
     @Min(0)
     private final BigDecimal deliveryPrice;
 
-    @NotNull
     private final LocalDate expirationDate;
 
     @NotNull
@@ -54,10 +53,16 @@ public class Product extends BaseModel {
     }
 
     public boolean isExpired() {
+        if (expirationDate == null) {
+            return false;
+        }
         return expirationDate.isBefore(LocalDate.now());
     }
 
     public long daysUntilExpiration() {
+        if (expirationDate == null) {
+            return Long.MAX_VALUE;
+        }
         return ChronoUnit.DAYS.between(LocalDate.now(), expirationDate);
     }
 
@@ -69,7 +74,8 @@ public class Product extends BaseModel {
         BigDecimal markupMultiplier = BigDecimal.valueOf(1 + markupPercent / 100.0);
         BigDecimal priceWithMarkup = deliveryPrice.multiply(markupMultiplier);
 
-        if (daysUntilExpiration() <= store.getDaysBeforeExpirationForDiscount()
+        if (expirationDate != null
+            && daysUntilExpiration() <= store.getDaysBeforeExpirationForDiscount()
             && daysUntilExpiration() > 0) {
             BigDecimal discountMultiplier = BigDecimal.valueOf(1 - store.getDiscountPercent() / 100.0);
             return priceWithMarkup.multiply(discountMultiplier);

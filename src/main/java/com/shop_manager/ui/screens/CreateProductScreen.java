@@ -41,13 +41,18 @@ public class CreateProductScreen extends BaseScreen {
                 BigDecimal.ZERO
             );
 
-            LocalDate expirationDate = InputUtility.readDate(screenManager, "Enter expiration date");
-
             ProductCategory category = InputUtility.readEnum(
                 screenManager,
                 "\nSelect product category:",
                 ProductCategory.values()
             );
+
+            LocalDate expirationDate;
+            if (category == ProductCategory.FOOD) {
+                expirationDate = InputUtility.readDate(screenManager, "\nEnter expiration date");
+            } else {
+                expirationDate = InputUtility.readOptionalDate(screenManager, "\nEnter expiration date");
+            }
 
             System.out.println();
 
@@ -56,8 +61,8 @@ public class CreateProductScreen extends BaseScreen {
             System.out.println("╚══════════════════════════════════════╝");
             System.out.println("Name: " + name);
             System.out.println("Delivery Price: " + deliveryPrice);
-            System.out.println("Expiration Date: " + expirationDate);
             System.out.println("Category: " + category.name());
+            System.out.println("Expiration Date: " + (expirationDate != null ? expirationDate : "N/A"));
             System.out.println();
 
             if (!InputUtility.readConfirmation(screenManager, "Do you want to create this product?")) {
