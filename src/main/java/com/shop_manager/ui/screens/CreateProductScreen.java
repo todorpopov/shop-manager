@@ -9,6 +9,7 @@ import com.shop_manager.ui.BaseScreen;
 import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.exceptions.ScreenCanceledException;
 import com.shop_manager.ui.utils.InputUtility;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class CreateProductScreen extends BaseScreen {
         System.out.println("╔══════════════════════════════════════╗");
         System.out.println("║      CREATE NEW PRODUCT              ║");
         System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("(Enter \"0\" at any time to cancel)");
         System.out.println();
     }
 
@@ -74,7 +76,7 @@ public class CreateProductScreen extends BaseScreen {
             Product product = new Product(name, deliveryPrice, expirationDate, category);
             productService.addProduct(product);
 
-            System.out.println("✓ Product created successfully!");
+            System.out.println("Product created successfully!");
             System.out.println("Product ID: " + product.getId());
             waitForKey();
 
@@ -89,6 +91,10 @@ public class CreateProductScreen extends BaseScreen {
             System.out.println("Validation Error: " + e.getMessage());
             waitForKey();
             return this;
+        } catch (ScreenCanceledException e) {
+            System.out.println("Product creation cancelled.");
+            waitForKey();
+            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
         }
     }
 

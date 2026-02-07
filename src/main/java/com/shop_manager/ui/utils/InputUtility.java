@@ -1,6 +1,7 @@
 package com.shop_manager.ui.utils;
 
 import com.shop_manager.ui.ScreenManager;
+import com.shop_manager.ui.exceptions.ScreenCanceledException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +15,10 @@ public class InputUtility {
         while (true) {
             System.out.print(prompt);
             String input = screenManager.nextLine();
+
+            if (input.equals("0")) {
+                throw new ScreenCanceledException("Operation cancelled by user.");
+            }
 
             if (input.isBlank()) {
                 System.out.println("Error: Input cannot be empty.");
@@ -33,6 +38,10 @@ public class InputUtility {
         while (true) {
             System.out.print(prompt);
             String input = screenManager.nextLine();
+
+            if (input.equals("0")) {
+                throw new ScreenCanceledException("Operation cancelled by user.");
+            }
 
             if (input.isBlank()) {
                 System.out.println("Error: Input cannot be empty.");
@@ -59,6 +68,10 @@ public class InputUtility {
             System.out.print(prompt + " (yyyy-mm-dd): ");
             String input = screenManager.nextLine();
 
+            if (input.equals("0")) {
+                throw new ScreenCanceledException("Operation cancelled by user.");
+            }
+
             if (input.isBlank()) {
                 System.out.println("Error: Input cannot be empty.");
                 continue;
@@ -83,6 +96,10 @@ public class InputUtility {
         while (true) {
             System.out.print(prompt + " (yyyy-mm-dd or press Enter to skip): ");
             String input = screenManager.nextLine();
+
+            if (input.equals("0")) {
+                throw new ScreenCanceledException("Operation cancelled by user.");
+            }
 
             if (input.isBlank()) {
                 return null;
@@ -116,6 +133,10 @@ public class InputUtility {
             System.out.print("Please select an option (1-" + enumValues.length + "): ");
 
             String input = screenManager.nextLine();
+
+            if (input.equals("0")) {
+                throw new ScreenCanceledException("Operation cancelled by user.");
+            }
 
             try {
                 int choice = Integer.parseInt(input);

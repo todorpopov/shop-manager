@@ -10,6 +10,7 @@ import com.shop_manager.ui.BaseScreen;
 import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.exceptions.ScreenCanceledException;
 import com.shop_manager.ui.utils.InputUtility;
 import com.shop_manager.ui.utils.UpdateUtility;
 
@@ -29,6 +30,7 @@ public class UpdateProductScreen extends BaseScreen {
         System.out.println("╔══════════════════════════════════════╗");
         System.out.println("║      UPDATE PRODUCT                  ║");
         System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("(Enter \"0\" at any time to cancel)");
         System.out.println();
     }
 
@@ -131,6 +133,10 @@ public class UpdateProductScreen extends BaseScreen {
             System.out.println("Validation Error: " + e.getMessage());
             waitForKey();
             return this;
+        } catch (ScreenCanceledException e) {
+            System.out.println("Product update cancelled.");
+            waitForKey();
+            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
         }
     }
 
@@ -140,5 +146,3 @@ public class UpdateProductScreen extends BaseScreen {
         screenManager.nextLine();
     }
 }
-
-

@@ -20,9 +20,10 @@ public class MainScreen extends BaseScreen {
         System.out.println("1. Manage Entities");
         System.out.println("2. Enter Store");
         System.out.println("3. Load Receipts");
-        System.out.println("4. Exit");
         System.out.println();
-        System.out.print("Please select an option (1-4): ");
+        System.out.println("0. Exit");
+        System.out.println();
+        System.out.print("Please select an option (0-3): ");
     }
 
     @Override
@@ -38,7 +39,7 @@ public class MainScreen extends BaseScreen {
                 return this;
             case "3":
                 return screenManager.goToScreen(ScreenName.RECEIPT_LOADER_SCREEN);
-            case "4":
+            case "0":
                 screenManager.stop();
                 return null;
             default:

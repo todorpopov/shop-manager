@@ -7,6 +7,7 @@ import com.shop_manager.ui.BaseScreen;
 import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.exceptions.ScreenCanceledException;
 import com.shop_manager.ui.utils.InputUtility;
 
 public class DeleteProductScreen extends BaseScreen {
@@ -22,6 +23,7 @@ public class DeleteProductScreen extends BaseScreen {
         System.out.println("╔══════════════════════════════════════╗");
         System.out.println("║      DELETE PRODUCT                  ║");
         System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("(Enter \"0\" at any time to cancel)");
         System.out.println();
     }
 
@@ -69,6 +71,10 @@ public class DeleteProductScreen extends BaseScreen {
             System.out.println("Error: " + e.getMessage());
             waitForKey();
             return this;
+        } catch (ScreenCanceledException e) {
+            System.out.println("Product deletion cancelled.");
+            waitForKey();
+            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
         }
     }
 

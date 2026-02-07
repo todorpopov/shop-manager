@@ -1,6 +1,7 @@
 package com.shop_manager.ui.utils;
 
 import com.shop_manager.ui.ScreenManager;
+import com.shop_manager.ui.exceptions.ScreenCanceledException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,6 +14,10 @@ public class UpdateUtility {
     public static String readUpdatedString(ScreenManager screenManager, String prompt, String currentValue) {
         System.out.print(prompt + " [" + currentValue + "]: ");
         String input = screenManager.nextLine();
+
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
 
         if (input.isBlank()) {
             return null;
@@ -29,6 +34,10 @@ public class UpdateUtility {
     public static BigDecimal readUpdatedBigDecimal(ScreenManager screenManager, String prompt, BigDecimal currentValue) {
         System.out.print(prompt + " [" + currentValue + "]: ");
         String input = screenManager.nextLine();
+
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
 
         if (input.isBlank()) {
             return null;
@@ -64,6 +73,10 @@ public class UpdateUtility {
 
         String input = screenManager.nextLine();
 
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
+
         if (input.isBlank()) {
             return null;
         }
@@ -87,6 +100,10 @@ public class UpdateUtility {
         System.out.print(prompt + " (yyyy-mm-dd) [" + (currentValue != null ? currentValue : "N/A") + "]: ");
         String input = screenManager.nextLine();
 
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
+
         if (input.isBlank()) {
             return null;
         }
@@ -109,6 +126,10 @@ public class UpdateUtility {
     public static LocalDate readUpdatedNonFoodDate(ScreenManager screenManager, String prompt, LocalDate currentValue) {
         System.out.print(prompt + " (yyyy-mm-dd or press Enter to skip) [" + (currentValue != null ? currentValue : "N/A") + "]: ");
         String input = screenManager.nextLine();
+
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
 
         if (input.isBlank()) {
             return null;
