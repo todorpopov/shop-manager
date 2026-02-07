@@ -1,10 +1,12 @@
 package com.shop_manager.ui;
 
+import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.screens.CreateProductScreen;
 import com.shop_manager.ui.screens.MainScreen;
-import com.shop_manager.ui.screens.ManageScreen;
 import com.shop_manager.ui.screens.ManageProductScreen;
+import com.shop_manager.ui.screens.ManageScreen;
 import com.shop_manager.ui.screens.ReceiptLoaderScreen;
 import com.shop_manager.ui.screens.ReceiptRenderScreen;
 
@@ -18,11 +20,16 @@ public class ScreenManager {
     private final HashMap<ScreenName, Screen> screens = new HashMap<>();
 
     private final ReceiptLoaderService receiptLoaderService;
+    private final ProductService productService;
 
-    public ScreenManager(ReceiptLoaderService receiptLoaderService) {
+    public ScreenManager(
+        ReceiptLoaderService receiptLoaderService,
+        ProductService productService
+    ) {
         this.scanner = new Scanner(System.in);
         this.running = true;
         this.receiptLoaderService = receiptLoaderService;
+        this.productService = productService;
         initializeScreens();
     }
 
@@ -69,7 +76,8 @@ public class ScreenManager {
     private void initializeScreens() {
         screens.put(ScreenName.MAIN_SCREEN, new MainScreen(this));
         screens.put(ScreenName.MANAGE_SCREEN, new ManageScreen(this));
-        screens.put(ScreenName.MANAGE_PRODUCT_SCREEN, new ManageProductScreen(this));
+        screens.put(ScreenName.PRODUCT_MANAGE_SCREEN, new ManageProductScreen(this));
+        screens.put(ScreenName.CREATE_PRODUCT_SCREEN, new CreateProductScreen(this, productService));
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
     }

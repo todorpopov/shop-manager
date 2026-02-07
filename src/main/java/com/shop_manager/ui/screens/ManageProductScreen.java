@@ -32,9 +32,7 @@ public class ManageProductScreen extends BaseScreen {
 
         switch (input) {
             case "1":
-                System.out.println("Create Product - Coming soon!");
-                waitForKey();
-                return this;
+                return screenManager.goToScreen(ScreenName.CREATE_PRODUCT_SCREEN);
             case "2":
                 System.out.println("View All Products - Coming soon!");
                 waitForKey();

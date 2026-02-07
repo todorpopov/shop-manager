@@ -34,7 +34,7 @@ public class ManageScreen extends BaseScreen {
                 waitForKey();
                 return this;
             case "2":
-                return screenManager.goToScreen(ScreenName.MANAGE_PRODUCT_SCREEN);
+                return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
             case "3":
                 System.out.println("Manage Cashiers - Coming soon!");
                 waitForKey();
