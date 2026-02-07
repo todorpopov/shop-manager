@@ -4,6 +4,7 @@ import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.ui.enums.ScreenName;
 import com.shop_manager.ui.screens.MainScreen;
 import com.shop_manager.ui.screens.ManageScreen;
+import com.shop_manager.ui.screens.ManageProductScreen;
 import com.shop_manager.ui.screens.ReceiptLoaderScreen;
 import com.shop_manager.ui.screens.ReceiptRenderScreen;
 
@@ -68,6 +69,7 @@ public class ScreenManager {
     private void initializeScreens() {
         screens.put(ScreenName.MAIN_SCREEN, new MainScreen(this));
         screens.put(ScreenName.MANAGE_SCREEN, new ManageScreen(this));
+        screens.put(ScreenName.MANAGE_PRODUCT_SCREEN, new ManageProductScreen(this));
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
     }
