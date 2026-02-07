@@ -31,7 +31,7 @@ public class Receipt extends BaseModel {
         super(id);
         this.cashier = cashier;
         this.issuedAt = issuedAt;
-        this.items = items;
+        this.items = items != null ? List.copyOf(items) : null;
         this.totalAmount = totalAmount;
     }
 
@@ -44,7 +44,7 @@ public class Receipt extends BaseModel {
         super(null);
         this.cashier = cashier;
         this.issuedAt = issuedAt;
-        this.items = items;
+        this.items = items != null ? List.copyOf(items) : null;
         this.totalAmount = totalAmount;
     }
 

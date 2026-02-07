@@ -7,6 +7,7 @@ import com.shop_manager.storage_engine.annotations.Unique;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Store extends BaseModel {
@@ -108,15 +109,15 @@ public class Store extends BaseModel {
     }
 
     public List<InventoryItem> getInventory() {
-        return inventory;
+        return Collections.unmodifiableList(inventory);
     }
 
     public List<Cashier> getCashiers() {
-        return cashiers;
+        return Collections.unmodifiableList(cashiers);
     }
 
     public List<Receipt> getReceipts() {
-        return receipts;
+        return Collections.unmodifiableList(receipts);
     }
 
     public long getIssuedReceiptsCount() {
@@ -125,6 +126,27 @@ public class Store extends BaseModel {
 
     public BigDecimal getTurnover() {
         return turnover;
+    }
+
+    public BigDecimal calculateTotalDeliveryCosts() {
+        return inventory.stream()
+            .map(item -> item.getProduct().getDeliveryPrice()
+                .multiply(BigDecimal.valueOf(item.getQuantity())))
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal calculateTotalSalaryExpenses() {
+        return cashiers.stream()
+            .map(Cashier::getMonthlySalary)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal calculateTotalExpenses() {
+        return calculateTotalDeliveryCosts().add(calculateTotalSalaryExpenses());
+    }
+
+    public BigDecimal calculateProfit() {
+        return turnover.subtract(calculateTotalExpenses());
     }
 
     @Override

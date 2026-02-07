@@ -61,6 +61,23 @@ public class Product extends BaseModel {
         return ChronoUnit.DAYS.between(LocalDate.now(), expirationDate);
     }
 
+    public BigDecimal calculateSellingPrice(Store store) {
+        double markupPercent = category == ProductCategory.FOOD
+            ? store.getFoodMarkupPercent()
+            : store.getNonFoodMarkupPercent();
+
+        BigDecimal markupMultiplier = BigDecimal.valueOf(1 + markupPercent / 100.0);
+        BigDecimal priceWithMarkup = deliveryPrice.multiply(markupMultiplier);
+
+        if (daysUntilExpiration() <= store.getDaysBeforeExpirationForDiscount()
+            && daysUntilExpiration() > 0) {
+            BigDecimal discountMultiplier = BigDecimal.valueOf(1 - store.getDiscountPercent() / 100.0);
+            return priceWithMarkup.multiply(discountMultiplier);
+        }
+
+        return priceWithMarkup;
+    }
+
     public String getName() {
         return name;
     }

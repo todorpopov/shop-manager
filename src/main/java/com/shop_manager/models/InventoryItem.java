@@ -13,6 +13,10 @@ public class InventoryItem {
         this.quantity -= amount;
     }
 
+    public void increaseQuantity(int amount) {
+        this.quantity += amount;
+    }
+
     public Product getProduct() {
         return product;
     }
