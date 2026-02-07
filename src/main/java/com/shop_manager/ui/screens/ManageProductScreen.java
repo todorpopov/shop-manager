@@ -18,12 +18,11 @@ public class ManageProductScreen extends BaseScreen {
         System.out.println();
         System.out.println("1. Create Product");
         System.out.println("2. View All Products");
-        System.out.println("3. View Product by ID");
-        System.out.println("4. Update Product");
-        System.out.println("5. Delete Product");
-        System.out.println("6. Back to Manage Menu");
+        System.out.println("3. Update Product");
+        System.out.println("4. Delete Product");
+        System.out.println("5. Back to Manage Menu");
         System.out.println();
-        System.out.print("Please select an option (1-6): ");
+        System.out.print("Please select an option (1-5): ");
     }
 
     @Override
@@ -36,16 +35,10 @@ public class ManageProductScreen extends BaseScreen {
             case "2":
                 return screenManager.goToScreen(ScreenName.VIEW_ALL_PRODUCTS_SCREEN);
             case "3":
-                System.out.println("View Product by ID - Coming soon!");
-                waitForKey();
-                return this;
-            case "4":
                 return screenManager.goToScreen(ScreenName.UPDATE_PRODUCT_SCREEN);
+            case "4":
+                return screenManager.goToScreen(ScreenName.DELETE_PRODUCT_SCREEN);
             case "5":
-                System.out.println("Delete Product - Coming soon!");
-                waitForKey();
-                return this;
-            case "6":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             default:
                 System.out.println("Invalid option. Please try again.");
