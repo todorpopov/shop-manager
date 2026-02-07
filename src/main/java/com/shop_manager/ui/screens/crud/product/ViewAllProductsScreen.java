@@ -69,7 +69,7 @@ public class ViewAllProductsScreen extends BaseScreen {
     @Override
     public Screen handleInput() {
         screenManager.nextLine();
-        return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+        return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
     }
 }
 

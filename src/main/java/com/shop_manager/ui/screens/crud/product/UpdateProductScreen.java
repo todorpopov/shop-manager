@@ -101,7 +101,7 @@ public class UpdateProductScreen extends BaseScreen {
             if (!InputUtility.readConfirmation(screenManager, "Do you want to update this product?")) {
                 System.out.println("Product update cancelled.");
                 waitForKey();
-                return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
             }
 
             Product updatedProduct = new Product(
@@ -118,7 +118,7 @@ public class UpdateProductScreen extends BaseScreen {
             System.out.println("Product ID: " + updatedProduct.getId());
             waitForKey();
 
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
 
         } catch (NotFoundException e) {
             System.out.println("Error: " + e.getMessage());
@@ -136,7 +136,7 @@ public class UpdateProductScreen extends BaseScreen {
         } catch (ScreenCanceledException e) {
             System.out.println("Product update cancelled.");
             waitForKey();
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
         }
     }
 

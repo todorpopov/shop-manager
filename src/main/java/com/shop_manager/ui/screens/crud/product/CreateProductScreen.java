@@ -70,7 +70,7 @@ public class CreateProductScreen extends BaseScreen {
             if (!InputUtility.readConfirmation(screenManager, "Do you want to create this product?")) {
                 System.out.println("Product creation cancelled.");
                 waitForKey();
-                return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
             }
 
             Product product = new Product(name, deliveryPrice, expirationDate, category);
@@ -80,7 +80,7 @@ public class CreateProductScreen extends BaseScreen {
             System.out.println("Product ID: " + product.getId());
             waitForKey();
 
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
 
         } catch (AlreadyExistsException e) {
             System.out.println("Error: " + e.getMessage());
@@ -94,7 +94,7 @@ public class CreateProductScreen extends BaseScreen {
         } catch (ScreenCanceledException e) {
             System.out.println("Product creation cancelled.");
             waitForKey();
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
         }
     }
 

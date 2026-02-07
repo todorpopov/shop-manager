@@ -6,7 +6,8 @@ import com.shop_manager.ui.enums.ScreenName;
 import com.shop_manager.ui.screens.crud.product.CreateProductScreen;
 import com.shop_manager.ui.screens.crud.product.DeleteProductScreen;
 import com.shop_manager.ui.screens.MainScreen;
-import com.shop_manager.ui.screens.manage.ManageProductScreen;
+import com.shop_manager.ui.screens.manage.ManageCashiersScreen;
+import com.shop_manager.ui.screens.manage.ManageProductsScreen;
 import com.shop_manager.ui.screens.manage.ManageScreen;
 import com.shop_manager.ui.screens.receipt_loader.ReceiptLoaderScreen;
 import com.shop_manager.ui.screens.receipt_loader.ReceiptRenderScreen;
@@ -78,12 +79,17 @@ public class ScreenManager {
 
     private void initializeScreens() {
         screens.put(ScreenName.MAIN_SCREEN, new MainScreen(this));
+
         screens.put(ScreenName.MANAGE_SCREEN, new ManageScreen(this));
-        screens.put(ScreenName.PRODUCT_MANAGE_SCREEN, new ManageProductScreen(this));
+
+        screens.put(ScreenName.MANAGE_PRODUCTS_SCREEN, new ManageProductsScreen(this));
         screens.put(ScreenName.CREATE_PRODUCT_SCREEN, new CreateProductScreen(this, productService));
         screens.put(ScreenName.VIEW_ALL_PRODUCTS_SCREEN, new ViewAllProductsScreen(this, productService));
         screens.put(ScreenName.UPDATE_PRODUCT_SCREEN, new UpdateProductScreen(this, productService));
         screens.put(ScreenName.DELETE_PRODUCT_SCREEN, new DeleteProductScreen(this, productService));
+
+        screens.put(ScreenName.MANAGE_CASHIERS_SCREEN, new ManageCashiersScreen(this));
+
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
     }

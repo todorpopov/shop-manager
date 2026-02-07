@@ -5,21 +5,21 @@ import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
 
-public class ManageProductScreen extends BaseScreen {
-    public ManageProductScreen(ScreenManager screenManager) {
+public class ManageCashiersScreen extends BaseScreen {
+    public ManageCashiersScreen(ScreenManager screenManager) {
         super(screenManager);
     }
 
     @Override
     public void display() {
         System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║      MANAGE PRODUCTS                 ║");
+        System.out.println("║      MANAGE CASHIERS                 ║");
         System.out.println("╚══════════════════════════════════════╝");
         System.out.println();
-        System.out.println("1. Create Product");
-        System.out.println("2. View All Products");
-        System.out.println("3. Update Product");
-        System.out.println("4. Delete Product");
+        System.out.println("1. Create Cashier");
+        System.out.println("2. View All Cashiers");
+        System.out.println("3. Update Cashier");
+        System.out.println("4. Delete Cashier");
         System.out.println();
         System.out.println("0. Back to Manage Menu");
         System.out.println();
@@ -32,13 +32,13 @@ public class ManageProductScreen extends BaseScreen {
 
         switch (input) {
             case "1":
-                return screenManager.goToScreen(ScreenName.CREATE_PRODUCT_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "2":
-                return screenManager.goToScreen(ScreenName.VIEW_ALL_PRODUCTS_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "3":
-                return screenManager.goToScreen(ScreenName.UPDATE_PRODUCT_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "4":
-                return screenManager.goToScreen(ScreenName.DELETE_PRODUCT_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "0":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             default:
@@ -53,4 +53,3 @@ public class ManageProductScreen extends BaseScreen {
         screenManager.nextLine();
     }
 }
-

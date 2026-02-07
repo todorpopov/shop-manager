@@ -57,7 +57,7 @@ public class DeleteProductScreen extends BaseScreen {
             if (!InputUtility.readConfirmation(screenManager, "Are you sure you want to delete this product?")) {
                 System.out.println("Product deletion cancelled.");
                 waitForKey();
-                return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
             }
 
             productService.deleteProduct(productId);
@@ -65,7 +65,7 @@ public class DeleteProductScreen extends BaseScreen {
             System.out.println("Product deleted successfully!");
             waitForKey();
 
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
 
         } catch (NotFoundException e) {
             System.out.println("Error: " + e.getMessage());
@@ -74,7 +74,7 @@ public class DeleteProductScreen extends BaseScreen {
         } catch (ScreenCanceledException e) {
             System.out.println("Product deletion cancelled.");
             waitForKey();
-            return screenManager.goToScreen(ScreenName.PRODUCT_MANAGE_SCREEN);
+            return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
         }
     }
 
