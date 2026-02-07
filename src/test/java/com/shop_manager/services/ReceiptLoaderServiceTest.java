@@ -27,7 +27,7 @@ class ReceiptLoaderServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        receiptLoaderService = new ReceiptLoaderService(RECEIPTS_DIR);
+        receiptLoaderService = ReceiptLoaderService.getInstance();
         this.receiptLoaderService.clearReceiptsDirectory();
     }
 
@@ -102,4 +102,3 @@ class ReceiptLoaderServiceTest {
         );
     }
 }
-

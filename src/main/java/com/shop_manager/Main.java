@@ -6,7 +6,7 @@ import com.shop_manager.ui.ScreenManager;
 public class Main
 {
     public static void main(String[] args) {
-        ReceiptLoaderService receiptLoaderService = new ReceiptLoaderService();
+        ReceiptLoaderService receiptLoaderService = ReceiptLoaderService.getInstance();
 
         ScreenManager screenManager = new ScreenManager(receiptLoaderService);
         screenManager.startUi();

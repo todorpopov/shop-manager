@@ -33,19 +33,23 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ReceiptLoaderService {
-    private static final String RECEIPTS_DIR_NAME = "receipts";
+    private static ReceiptLoaderService instance;
+
     private static final String FILE_PREFIX = "receipt_";
     private static final String FILE_SUFFIX = ".xml";
     private static final DateTimeFormatter FILE_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
 
     private final Path receiptsDir;
 
-    public ReceiptLoaderService() {
-        this(Paths.get(RECEIPTS_DIR_NAME));
+    private ReceiptLoaderService() {
+        this.receiptsDir = Paths.get("receipts");
     }
 
-    public ReceiptLoaderService(Path receiptsDir) {
-        this.receiptsDir = receiptsDir;
+    public static ReceiptLoaderService getInstance() {
+        if (instance == null) {
+            instance = new ReceiptLoaderService();
+        }
+        return instance;
     }
 
     public void saveReceipt(Receipt receipt) throws IOException {
