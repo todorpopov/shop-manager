@@ -32,7 +32,7 @@ public class ManageCashiersScreen extends BaseScreen {
 
         switch (input) {
             case "1":
-                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.CREATE_CASHIER_SCREEN);
             case "2":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "3":

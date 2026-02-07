@@ -1,6 +1,5 @@
 package com.shop_manager.ui.screens.crud.product;
 
-import com.shop_manager.exceptions.AlreadyExistsException;
 import com.shop_manager.exceptions.ConstraintViolationException;
 import com.shop_manager.models.Product;
 import com.shop_manager.models.enums.ProductCategory;
@@ -82,11 +81,6 @@ public class CreateProductScreen extends BaseScreen {
 
             return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
 
-        } catch (AlreadyExistsException e) {
-            System.out.println("Error: " + e.getMessage());
-            System.out.println("A product with this name already exists. Please try again with a different name.");
-            waitForKey();
-            return this;
         } catch (ConstraintViolationException e) {
             System.out.println("Validation Error: " + e.getMessage());
             waitForKey();

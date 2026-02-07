@@ -1,8 +1,10 @@
 package com.shop_manager.ui;
 
+import com.shop_manager.services.CashierService;
 import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.screens.crud.cashier.CreateCashierScreen;
 import com.shop_manager.ui.screens.crud.product.CreateProductScreen;
 import com.shop_manager.ui.screens.crud.product.DeleteProductScreen;
 import com.shop_manager.ui.screens.MainScreen;
@@ -25,15 +27,18 @@ public class ScreenManager {
 
     private final ReceiptLoaderService receiptLoaderService;
     private final ProductService productService;
+    private final CashierService cashierService;
 
     public ScreenManager(
         ReceiptLoaderService receiptLoaderService,
-        ProductService productService
+        ProductService productService,
+        CashierService cashierService
     ) {
         this.scanner = new Scanner(System.in);
         this.running = true;
         this.receiptLoaderService = receiptLoaderService;
         this.productService = productService;
+        this.cashierService = cashierService;
         initializeScreens();
     }
 
@@ -89,6 +94,7 @@ public class ScreenManager {
         screens.put(ScreenName.DELETE_PRODUCT_SCREEN, new DeleteProductScreen(this, productService));
 
         screens.put(ScreenName.MANAGE_CASHIERS_SCREEN, new ManageCashiersScreen(this));
+        screens.put(ScreenName.CREATE_CASHIER_SCREEN, new CreateCashierScreen(this, cashierService));
 
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
