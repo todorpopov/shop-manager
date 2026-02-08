@@ -45,9 +45,7 @@ public class ManageStoresScreen extends BaseScreen {
             case "5":
                 return screenManager.goToScreen(ScreenName.ADD_CASHIER_SCREEN);
             case "6":
-                System.out.println("Add Inventory Item to Store - Coming soon!");
-                waitForKey();
-                return this;
+                return screenManager.goToScreen(ScreenName.ADD_INVENTORY_ITEM_SCREEN);
             case "0":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             default:
