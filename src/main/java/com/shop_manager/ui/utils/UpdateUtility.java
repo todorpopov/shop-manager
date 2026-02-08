@@ -58,6 +58,60 @@ public class UpdateUtility {
         }
     }
 
+    public static Double readUpdatedDouble(ScreenManager screenManager, String prompt, double currentValue) {
+        System.out.print(prompt + " [" + currentValue + "]: ");
+        String input = screenManager.nextLine();
+
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
+
+        if (input.isBlank()) {
+            return null;
+        }
+
+        try {
+            double value = Double.parseDouble(input);
+
+            if (value < 0) {
+                System.out.println("Error: Value must be at least 0.");
+                return readUpdatedDouble(screenManager, prompt, currentValue);
+            }
+
+            return value;
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Please enter a valid number.");
+            return readUpdatedDouble(screenManager, prompt, currentValue);
+        }
+    }
+
+    public static Integer readUpdatedInt(ScreenManager screenManager, String prompt, int currentValue) {
+        System.out.print(prompt + " [" + currentValue + "]: ");
+        String input = screenManager.nextLine();
+
+        if (input.equals("0")) {
+            throw new ScreenCanceledException("Operation cancelled by user.");
+        }
+
+        if (input.isBlank()) {
+            return null;
+        }
+
+        try {
+            int value = Integer.parseInt(input);
+
+            if (value < 0) {
+                System.out.println("Error: Value must be at least 0.");
+                return readUpdatedInt(screenManager, prompt, currentValue);
+            }
+
+            return value;
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Please enter a valid integer.");
+            return readUpdatedInt(screenManager, prompt, currentValue);
+        }
+    }
+
     public static <E extends Enum<E>> E readUpdatedEnum(
         ScreenManager screenManager,
         String prompt,
@@ -150,4 +204,3 @@ public class UpdateUtility {
         }
     }
 }
-
