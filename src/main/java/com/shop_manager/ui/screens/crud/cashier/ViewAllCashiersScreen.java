@@ -50,7 +50,7 @@ public class ViewAllCashiersScreen extends BaseScreen {
                 );
             }
 
-            System.out.println("─────────────────────────────────────────────────────────────────────────────────────────");
+            System.out.println("────────────────────────────────────────────────────────────────────────────────────────");
             System.out.println();
         }
 

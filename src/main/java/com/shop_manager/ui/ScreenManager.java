@@ -5,6 +5,7 @@ import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.ui.enums.ScreenName;
 import com.shop_manager.ui.screens.crud.cashier.CreateCashierScreen;
+import com.shop_manager.ui.screens.crud.cashier.UpdateCashierScreen;
 import com.shop_manager.ui.screens.crud.cashier.ViewAllCashiersScreen;
 import com.shop_manager.ui.screens.crud.product.CreateProductScreen;
 import com.shop_manager.ui.screens.crud.product.DeleteProductScreen;
@@ -97,6 +98,7 @@ public class ScreenManager {
         screens.put(ScreenName.MANAGE_CASHIERS_SCREEN, new ManageCashiersScreen(this));
         screens.put(ScreenName.CREATE_CASHIER_SCREEN, new CreateCashierScreen(this, cashierService));
         screens.put(ScreenName.VIEW_ALL_CASHIERS_SCREEN, new ViewAllCashiersScreen(this, cashierService));
+        screens.put(ScreenName.UPDATE_CASHIER_SCREEN, new UpdateCashierScreen(this, cashierService));
 
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));

@@ -114,7 +114,7 @@ public class UpdateProductScreen extends BaseScreen {
 
             productService.updateProduct(updatedProduct);
 
-            System.out.println("✓ Product updated successfully!");
+            System.out.println("Product updated successfully!");
             System.out.println("Product ID: " + updatedProduct.getId());
             waitForKey();
 
