@@ -32,9 +32,9 @@ public class ManageStoresScreen extends BaseScreen {
 
         switch (input) {
             case "1":
-                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.CREATE_STORE_SCREEN);
             case "2":
-                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.VIEW_ALL_STORES_SCREEN);
             case "3":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "4":

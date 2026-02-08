@@ -3,6 +3,7 @@ package com.shop_manager.ui;
 import com.shop_manager.services.CashierService;
 import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
+import com.shop_manager.services.StoreService;
 import com.shop_manager.ui.enums.ScreenName;
 import com.shop_manager.ui.screens.crud.cashier.CreateCashierScreen;
 import com.shop_manager.ui.screens.crud.cashier.DeleteCashierScreen;
@@ -19,6 +20,8 @@ import com.shop_manager.ui.screens.receipt_loader.ReceiptLoaderScreen;
 import com.shop_manager.ui.screens.receipt_loader.ReceiptRenderScreen;
 import com.shop_manager.ui.screens.crud.product.UpdateProductScreen;
 import com.shop_manager.ui.screens.crud.product.ViewAllProductsScreen;
+import com.shop_manager.ui.screens.crud.store.CreateStoreScreen;
+import com.shop_manager.ui.screens.crud.store.ViewAllStoresScreen;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -32,17 +35,20 @@ public class ScreenManager {
     private final ReceiptLoaderService receiptLoaderService;
     private final ProductService productService;
     private final CashierService cashierService;
+    private final StoreService storeService;
 
     public ScreenManager(
         ReceiptLoaderService receiptLoaderService,
         ProductService productService,
-        CashierService cashierService
+        CashierService cashierService,
+        StoreService storeService
     ) {
         this.scanner = new Scanner(System.in);
         this.running = true;
         this.receiptLoaderService = receiptLoaderService;
         this.productService = productService;
         this.cashierService = cashierService;
+        this.storeService = storeService;
         initializeScreens();
     }
 
@@ -104,6 +110,8 @@ public class ScreenManager {
         screens.put(ScreenName.DELETE_CASHIER_SCREEN, new DeleteCashierScreen(this, cashierService));
 
         screens.put(ScreenName.MANAGE_STORES_SCREEN, new ManageStoresScreen(this));
+        screens.put(ScreenName.CREATE_STORE_SCREEN, new CreateStoreScreen(this, storeService));
+        screens.put(ScreenName.VIEW_ALL_STORES_SCREEN, new ViewAllStoresScreen(this, storeService));
 
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));

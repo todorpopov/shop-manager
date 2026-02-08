@@ -3,6 +3,7 @@ package com.shop_manager;
 import com.shop_manager.services.CashierService;
 import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
+import com.shop_manager.services.StoreService;
 import com.shop_manager.ui.ScreenManager;
 
 public class Main
@@ -11,11 +12,13 @@ public class Main
         ReceiptLoaderService receiptLoaderService = ReceiptLoaderService.getInstance();
         ProductService productService = ProductService.getInstance();
         CashierService cashierService = CashierService.getInstance();
+        StoreService storeService = StoreService.getInstance();
 
         ScreenManager screenManager = new ScreenManager(
             receiptLoaderService,
             productService,
-            cashierService
+            cashierService,
+            storeService
         );
         screenManager.startUi();
     }
