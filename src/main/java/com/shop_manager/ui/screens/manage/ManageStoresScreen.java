@@ -21,9 +21,12 @@ public class ManageStoresScreen extends BaseScreen {
         System.out.println("3. Update Store");
         System.out.println("4. Delete Store");
         System.out.println();
+        System.out.println("5. Add Cashier to Store");
+        System.out.println("6. Add Inventory Item to Store");
+        System.out.println();
         System.out.println("0. Back to Manage Menu");
         System.out.println();
-        System.out.print("Please select an option (0-4): ");
+        System.out.print("Please select an option (0-6): ");
     }
 
     @Override
@@ -39,6 +42,12 @@ public class ManageStoresScreen extends BaseScreen {
                 return screenManager.goToScreen(ScreenName.UPDATE_STORE_SCREEN);
             case "4":
                 return screenManager.goToScreen(ScreenName.DELETE_STORE_SCREEN);
+            case "5":
+                return screenManager.goToScreen(ScreenName.ADD_CASHIER_SCREEN);
+            case "6":
+                System.out.println("Add Inventory Item to Store - Coming soon!");
+                waitForKey();
+                return this;
             case "0":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             default:

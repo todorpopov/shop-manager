@@ -19,9 +19,9 @@ public class ViewAllStoresScreen extends BaseScreen {
 
     @Override
     public void display() {
-        System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
-        System.out.println("║                                                           ALL STORES                                           ║");
-        System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
+        System.out.println("╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗");
+        System.out.println("║                                                                ALL STORES                                                                                      ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println();
 
         List<Store> stores = storeService.getAllStores();
@@ -32,10 +32,10 @@ public class ViewAllStoresScreen extends BaseScreen {
         } else {
             System.out.println("Total Stores: " + stores.size());
             System.out.println();
-            System.out.println("──────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
-            System.out.printf("%-5s %-25s %-12s %-12s %-18s %-12s %-10s %-12s%n",
-                "ID", "Name", "Food %", "Non-Food %", "Days for Disc.", "Discount %", "Receipts", "Turnover");
-            System.out.println("──────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
+            System.out.println("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
+            System.out.printf("%-5s %-25s %-12s %-12s %-18s %-12s %-10s %-12s %-10s %-10s%n",
+                "ID", "Name", "Food %", "Non-Food %", "Days for Disc.", "Discount %", "Receipts", "Turnover", "Cashiers", "Items");
+            System.out.println("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
 
             for (Store store : stores) {
                 String name = store.getName();
@@ -43,7 +43,7 @@ public class ViewAllStoresScreen extends BaseScreen {
                     name = name.substring(0, 22) + "...";
                 }
 
-                System.out.printf("%-5d %-25s %-12.2f %-12.2f %-18d %-12.2f %-10d %-12.2f%n",
+                System.out.printf("%-5d %-25s %-12.2f %-12.2f %-18d %-12.2f %-10d %-12.2f %-10d %-10d%n",
                     store.getId(),
                     name,
                     store.getFoodMarkupPercent(),
@@ -51,11 +51,13 @@ public class ViewAllStoresScreen extends BaseScreen {
                     store.getDaysBeforeExpirationForDiscount(),
                     store.getDiscountPercent(),
                     store.getIssuedReceiptsCount(),
-                    store.getTurnover()
+                    store.getTurnover(),
+                    store.getCashiers().size(),
+                    store.getInventory().size()
                 );
             }
 
-            System.out.println("──────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
+            System.out.println("───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────");
             System.out.println();
         }
 
