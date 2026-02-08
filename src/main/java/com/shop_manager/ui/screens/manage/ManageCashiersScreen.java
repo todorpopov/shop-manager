@@ -38,7 +38,7 @@ public class ManageCashiersScreen extends BaseScreen {
             case "3":
                 return screenManager.goToScreen(ScreenName.UPDATE_CASHIER_SCREEN);
             case "4":
-                return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
+                return screenManager.goToScreen(ScreenName.DELETE_CASHIER_SCREEN);
             case "0":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             default:
