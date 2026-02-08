@@ -21,6 +21,7 @@ import com.shop_manager.ui.screens.receipt_loader.ReceiptRenderScreen;
 import com.shop_manager.ui.screens.crud.product.UpdateProductScreen;
 import com.shop_manager.ui.screens.crud.product.ViewAllProductsScreen;
 import com.shop_manager.ui.screens.crud.store.CreateStoreScreen;
+import com.shop_manager.ui.screens.crud.store.DeleteStoreScreen;
 import com.shop_manager.ui.screens.crud.store.UpdateStoreScreen;
 import com.shop_manager.ui.screens.crud.store.ViewAllStoresScreen;
 
@@ -114,6 +115,7 @@ public class ScreenManager {
         screens.put(ScreenName.CREATE_STORE_SCREEN, new CreateStoreScreen(this, storeService));
         screens.put(ScreenName.VIEW_ALL_STORES_SCREEN, new ViewAllStoresScreen(this, storeService));
         screens.put(ScreenName.UPDATE_STORE_SCREEN, new UpdateStoreScreen(this, storeService));
+        screens.put(ScreenName.DELETE_STORE_SCREEN, new DeleteStoreScreen(this, storeService));
 
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
