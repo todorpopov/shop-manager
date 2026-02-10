@@ -6,6 +6,7 @@ import com.shop_manager.ui.BaseScreen;
 import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.utils.StringUtility;
 
 import java.util.List;
 
@@ -40,10 +41,7 @@ public class ViewAllProductsScreen extends BaseScreen {
             for (Product product : products) {
                 String status = product.isExpired() ? "True" : "False";
 
-                String name = product.getName();
-                if (name.length() > 30) {
-                    name = name.substring(0, 27) + "...";
-                }
+                String name = StringUtility.truncate(product.getName(), 30);
 
                 String expirationStr = product.getExpirationDate() != null
                     ? product.getExpirationDate().toString()
@@ -72,4 +70,3 @@ public class ViewAllProductsScreen extends BaseScreen {
         return screenManager.goToScreen(ScreenName.MANAGE_PRODUCTS_SCREEN);
     }
 }
-

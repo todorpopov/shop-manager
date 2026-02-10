@@ -6,6 +6,7 @@ import com.shop_manager.ui.BaseScreen;
 import com.shop_manager.ui.Screen;
 import com.shop_manager.ui.ScreenManager;
 import com.shop_manager.ui.enums.ScreenName;
+import com.shop_manager.ui.utils.StringUtility;
 
 import java.util.List;
 
@@ -38,10 +39,7 @@ public class ViewAllCashiersScreen extends BaseScreen {
             System.out.println("────────────────────────────────────────────────────────────────────────────────────────");
 
             for (Cashier cashier : cashiers) {
-                String name = cashier.getName();
-                if (name.length() > 30) {
-                    name = name.substring(0, 27) + "...";
-                }
+                String name = StringUtility.truncate(cashier.getName(), 30);
 
                 System.out.printf("%-5d %-30s %-15s%n",
                     cashier.getId(),
@@ -63,4 +61,3 @@ public class ViewAllCashiersScreen extends BaseScreen {
         return screenManager.goToScreen(ScreenName.MANAGE_CASHIERS_SCREEN);
     }
 }
-
