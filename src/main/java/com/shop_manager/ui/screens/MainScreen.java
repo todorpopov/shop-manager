@@ -34,9 +34,7 @@ public class MainScreen extends BaseScreen {
             case "1":
                 return screenManager.goToScreen(ScreenName.MANAGE_SCREEN);
             case "2":
-                System.out.println("Enter Store menu - Coming soon!");
-                waitForKey();
-                return this;
+                return screenManager.goToScreen(ScreenName.SELECT_STORE_SCREEN);
             case "3":
                 return screenManager.goToScreen(ScreenName.RECEIPT_LOADER_SCREEN);
             case "0":

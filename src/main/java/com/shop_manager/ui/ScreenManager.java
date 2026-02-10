@@ -1,6 +1,7 @@
 package com.shop_manager.ui;
 
 import com.shop_manager.services.CashierService;
+import com.shop_manager.services.CheckoutService;
 import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
 import com.shop_manager.services.StoreService;
@@ -26,6 +27,10 @@ import com.shop_manager.ui.screens.crud.store.CreateStoreScreen;
 import com.shop_manager.ui.screens.crud.store.DeleteStoreScreen;
 import com.shop_manager.ui.screens.crud.store.UpdateStoreScreen;
 import com.shop_manager.ui.screens.crud.store.ViewAllStoresScreen;
+import com.shop_manager.ui.screens.store_workflow.CheckoutScreen;
+import com.shop_manager.ui.screens.store_workflow.SelectCashierScreen;
+import com.shop_manager.ui.screens.store_workflow.SelectStoreScreen;
+import com.shop_manager.ui.screens.store_workflow.ShopProductsScreen;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -40,12 +45,14 @@ public class ScreenManager {
     private final ProductService productService;
     private final CashierService cashierService;
     private final StoreService storeService;
+    private final CheckoutService checkoutService;
 
     public ScreenManager(
         ReceiptLoaderService receiptLoaderService,
         ProductService productService,
         CashierService cashierService,
-        StoreService storeService
+        StoreService storeService,
+        CheckoutService checkoutService
     ) {
         this.scanner = new Scanner(System.in);
         this.running = true;
@@ -53,6 +60,7 @@ public class ScreenManager {
         this.productService = productService;
         this.cashierService = cashierService;
         this.storeService = storeService;
+        this.checkoutService = checkoutService;
         initializeScreens();
     }
 
@@ -120,6 +128,11 @@ public class ScreenManager {
         screens.put(ScreenName.DELETE_STORE_SCREEN, new DeleteStoreScreen(this, storeService));
         screens.put(ScreenName.ADD_CASHIER_SCREEN, new AddCashierScreen(this, storeService, cashierService));
         screens.put(ScreenName.ADD_INVENTORY_ITEM_SCREEN, new AddInventoryItemScreen(this, storeService, productService));
+
+        screens.put(ScreenName.SELECT_STORE_SCREEN, new SelectStoreScreen(this, storeService, checkoutService));
+        screens.put(ScreenName.SHOP_PRODUCTS_SCREEN, new ShopProductsScreen(this, checkoutService));
+        screens.put(ScreenName.SELECT_CASHIER_SCREEN, new SelectCashierScreen(this, checkoutService));
+        screens.put(ScreenName.CHECKOUT_SCREEN, new CheckoutScreen(this, checkoutService));
 
         screens.put(ScreenName.RECEIPT_LOADER_SCREEN, new ReceiptLoaderScreen(this, receiptLoaderService));
         screens.put(ScreenName.RECEIPT_RENDER_SCREEN, new ReceiptRenderScreen(this));
