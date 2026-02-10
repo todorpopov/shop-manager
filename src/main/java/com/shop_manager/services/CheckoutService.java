@@ -141,9 +141,9 @@ public class CheckoutService {
             totalAmount
         );
 
-        receiptLoaderService.saveReceipt(receipt);
         receiptService.addReceipt(receipt);
         currentStore.addReceipt(receipt);
+        receiptLoaderService.saveReceipt(receipt);
 
         cart.clear();
     }
@@ -161,4 +161,3 @@ public class CheckoutService {
         return null;
     }
 }
-
