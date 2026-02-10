@@ -11,6 +11,7 @@ import com.shop_manager.services.CashierService;
 import com.shop_manager.services.CheckoutService;
 import com.shop_manager.services.ProductService;
 import com.shop_manager.services.ReceiptLoaderService;
+import com.shop_manager.services.ReceiptService;
 import com.shop_manager.services.StoreService;
 import com.shop_manager.ui.ScreenManager;
 
@@ -25,6 +26,7 @@ public class Main
         CashierService cashierService = CashierService.getInstance();
         StoreService storeService = StoreService.getInstance();
         CheckoutService checkoutService = CheckoutService.getInstance();
+        ReceiptService receiptService = ReceiptService.getInstance();
 
         try {
             bootstrapEnvironment(storeService, cashierService, productService);
@@ -37,7 +39,8 @@ public class Main
             productService,
             cashierService,
             storeService,
-            checkoutService
+            checkoutService,
+            receiptService
         );
         screenManager.startUi();
     }
