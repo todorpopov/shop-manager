@@ -4,6 +4,7 @@ import com.shop_manager.models.Cashier;
 import com.shop_manager.models.Product;
 import com.shop_manager.models.Receipt;
 import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.Store;
 import com.shop_manager.models.enums.ProductCategory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -117,6 +118,7 @@ public class ReceiptLoaderService {
         receiptElement.setAttribute("id", receipt.getId().toString());
         document.appendChild(receiptElement);
 
+        appendStore(document, receiptElement, receipt.getStore());
         appendCashier(document, receiptElement, receipt.getCashier());
         appendTextElement(document, receiptElement, "issuedAt", receipt.getIssuedAt().toString());
         appendTextElement(document, receiptElement, "totalAmount", receipt.getTotalAmount().toPlainString());
@@ -129,6 +131,18 @@ public class ReceiptLoaderService {
         }
 
         return document;
+    }
+
+    private void appendStore(Document document, Element parent, Store store) {
+        Element storeElement = document.createElement("store");
+        storeElement.setAttribute("id", store.getId() == null ? "" : store.getId().toString());
+        parent.appendChild(storeElement);
+
+        appendTextElement(document, storeElement, "name", store.getName());
+        appendTextElement(document, storeElement, "foodMarkupPercent", String.valueOf(store.getFoodMarkupPercent()));
+        appendTextElement(document, storeElement, "nonFoodMarkupPercent", String.valueOf(store.getNonFoodMarkupPercent()));
+        appendTextElement(document, storeElement, "daysBeforeExpirationForDiscount", String.valueOf(store.getDaysBeforeExpirationForDiscount()));
+        appendTextElement(document, storeElement, "discountPercent", String.valueOf(store.getDiscountPercent()));
     }
 
     private void appendCashier(Document document, Element parent, Cashier cashier) {
@@ -154,7 +168,7 @@ public class ReceiptLoaderService {
 
         appendTextElement(document, productElement, "name", product.getName());
         appendTextElement(document, productElement, "deliveryPrice", product.getDeliveryPrice().toPlainString());
-        appendTextElement(document, productElement, "expirationDate", product.getExpirationDate().toString());
+        appendTextElement(document, productElement, "expirationDate", product.getExpirationDate() == null ? "" : product.getExpirationDate().toString());
         appendTextElement(document, productElement, "category", product.getCategory().name());
     }
 
@@ -181,6 +195,14 @@ public class ReceiptLoaderService {
         Element receiptElement = document.getDocumentElement();
         Long receiptId = parseOptionalLong(receiptElement.getAttribute("id"));
 
+        Store store;
+        try {
+            Element storeElement = findChildElement(receiptElement, "store");
+            store = parseStore(storeElement);
+        } catch (IllegalArgumentException ex) {
+            store = new Store("Unknown Store", 0.0, 0.0, 0, 0.0);
+        }
+
         Element cashierElement = findChildElement(receiptElement, "cashier");
         Cashier cashier = parseCashier(cashierElement);
 
@@ -190,7 +212,17 @@ public class ReceiptLoaderService {
         Element itemsElement = findChildElement(receiptElement, "items");
         List<ReceiptItem> items = parseItems(itemsElement);
 
-        return new Receipt(receiptId, cashier, issuedAt, items, totalAmount);
+        return new Receipt(receiptId, store, cashier, issuedAt, items, totalAmount);
+    }
+
+    private Store parseStore(Element storeElement) {
+        Long storeId = parseOptionalLong(storeElement.getAttribute("id"));
+        String name = getChildText(storeElement, "name");
+        double foodMarkupPercent = Double.parseDouble(getChildText(storeElement, "foodMarkupPercent"));
+        double nonFoodMarkupPercent = Double.parseDouble(getChildText(storeElement, "nonFoodMarkupPercent"));
+        int daysBeforeExpirationForDiscount = Integer.parseInt(getChildText(storeElement, "daysBeforeExpirationForDiscount"));
+        double discountPercent = Double.parseDouble(getChildText(storeElement, "discountPercent"));
+        return new Store(storeId, name, foodMarkupPercent, nonFoodMarkupPercent, daysBeforeExpirationForDiscount, discountPercent);
     }
 
     private Cashier parseCashier(Element cashierElement) {
@@ -227,9 +259,16 @@ public class ReceiptLoaderService {
         Long productId = parseOptionalLong(productElement.getAttribute("id"));
         String name = getChildText(productElement, "name");
         BigDecimal deliveryPrice = new BigDecimal(getChildText(productElement, "deliveryPrice"));
-        LocalDate expirationDate = LocalDate.parse(getChildText(productElement, "expirationDate"));
+        LocalDate expirationDate = parseOptionalDate(getChildText(productElement, "expirationDate"));
         ProductCategory category = ProductCategory.valueOf(getChildText(productElement, "category"));
         return new Product(productId, name, deliveryPrice, expirationDate, category);
+    }
+
+    private LocalDate parseOptionalDate(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return LocalDate.parse(value);
     }
 
     private Long parseOptionalLong(String value) {

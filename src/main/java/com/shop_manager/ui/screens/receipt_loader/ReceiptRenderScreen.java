@@ -35,6 +35,7 @@ public class ReceiptRenderScreen extends BaseScreen {
         System.out.println();
         System.out.println("Receipt ID: " + receipt.getId());
         System.out.println("Date & Time: " + receipt.getIssuedAt().format(DATE_TIME_FORMATTER));
+        System.out.println("Store: " + receipt.getStore().getName());
         System.out.println("Cashier: " + receipt.getCashier().getName());
         System.out.println();
         System.out.println("────────────────────────────────────────────────────────────────────────────────");
@@ -72,5 +73,3 @@ public class ReceiptRenderScreen extends BaseScreen {
         return String.format("$%.2f", amount);
     }
 }
-
-

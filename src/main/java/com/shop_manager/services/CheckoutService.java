@@ -135,6 +135,7 @@ public class CheckoutService {
         BigDecimal totalAmount = calculateTotal();
 
         Receipt receipt = new Receipt(
+            currentStore,
             cashier,
             LocalDateTime.now(),
             receiptItems,

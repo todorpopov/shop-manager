@@ -4,6 +4,7 @@ import com.shop_manager.models.Cashier;
 import com.shop_manager.models.Product;
 import com.shop_manager.models.Receipt;
 import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.Store;
 import com.shop_manager.models.enums.ProductCategory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,11 +53,13 @@ class ReceiptLoaderServiceTest {
 
         assertEquals(1L, loaded1.getId());
         assertEquals("John Doe", loaded1.getCashier().getName());
+        assertEquals("Test Store", loaded1.getStore().getName());
         assertEquals(ProductCategory.FOOD, loaded1.getItems().get(0).getProduct().getCategory());
         assertEquals(new BigDecimal("10.00"), loaded1.getTotalAmount());
 
         assertEquals(2L, loaded2.getId());
         assertEquals("Jane Smith", loaded2.getCashier().getName());
+        assertEquals("Test Store", loaded2.getStore().getName());
         assertEquals(ProductCategory.NON_FOOD, loaded2.getItems().getFirst().getProduct().getCategory());
         assertEquals(new BigDecimal("1200.00"), loaded2.getTotalAmount());
     }
@@ -81,6 +84,7 @@ class ReceiptLoaderServiceTest {
         ProductCategory category,
         BigDecimal totalAmount
     ) {
+        Store store = new Store(300L + receiptId, "Test Store", 10.0, 8.0, 3, 5.0);
         Cashier cashier = new Cashier(100L + receiptId, cashierName, new BigDecimal("2500.00"));
         Product product = new Product(
             200L + receiptId,
@@ -95,6 +99,7 @@ class ReceiptLoaderServiceTest {
 
         return new Receipt(
             receiptId,
+            store,
             cashier,
             LocalDateTime.now(),
             items,

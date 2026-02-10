@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Receipt extends BaseModel {
     @NotNull
+    private final Store store;
+
+    @NotNull
     private final Cashier cashier;
 
     @NotNull
@@ -23,12 +26,14 @@ public class Receipt extends BaseModel {
 
     public Receipt(
         long id,
+        Store store,
         Cashier cashier,
         LocalDateTime issuedAt,
         List<ReceiptItem> items,
         BigDecimal totalAmount
     ) {
         super(id);
+        this.store = store;
         this.cashier = cashier;
         this.issuedAt = issuedAt;
         this.items = items != null ? List.copyOf(items) : null;
@@ -36,16 +41,22 @@ public class Receipt extends BaseModel {
     }
 
     public Receipt(
+        Store store,
         Cashier cashier,
         LocalDateTime issuedAt,
         List<ReceiptItem> items,
         BigDecimal totalAmount
     ) {
         super(null);
+        this.store = store;
         this.cashier = cashier;
         this.issuedAt = issuedAt;
         this.items = items != null ? List.copyOf(items) : null;
         this.totalAmount = totalAmount;
+    }
+
+    public Store getStore() {
+        return store;
     }
 
     public Cashier getCashier() {
@@ -68,6 +79,7 @@ public class Receipt extends BaseModel {
     public String toString() {
         return "Receipt{" +
             "id=" + id +
+            ", store=" + store +
             ", totalAmount=" + totalAmount +
             ", items=" + items +
             ", issuedAt=" + issuedAt +

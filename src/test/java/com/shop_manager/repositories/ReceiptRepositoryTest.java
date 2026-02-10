@@ -7,6 +7,7 @@ import com.shop_manager.models.Cashier;
 import com.shop_manager.models.Product;
 import com.shop_manager.models.Receipt;
 import com.shop_manager.models.ReceiptItem;
+import com.shop_manager.models.Store;
 import com.shop_manager.models.enums.ProductCategory;
 import com.shop_manager.storage_engine.InMemoryDatabase;
 import org.junit.jupiter.api.AfterEach;
@@ -39,8 +40,13 @@ class ReceiptRepositoryTest {
         database.clearAll();
     }
 
+    private Store createStore() {
+        return new Store(1L, "Test Store", 10.0, 8.0, 3, 5.0);
+    }
+
     @Test
     void testAddReceipt_Success() throws AlreadyExistsException, ConstraintViolationException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
@@ -48,6 +54,7 @@ class ReceiptRepositoryTest {
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
         Receipt receipt = new Receipt(
+            store,
             cashier,
             LocalDateTime.now(),
             items,
@@ -62,6 +69,7 @@ class ReceiptRepositoryTest {
 
     @Test
     void testAddReceipt_WithExplicitId() throws AlreadyExistsException, ConstraintViolationException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
@@ -70,6 +78,7 @@ class ReceiptRepositoryTest {
 
         Receipt receipt = new Receipt(
             10L,
+            store,
             cashier,
             LocalDateTime.now(),
             items,
@@ -83,14 +92,15 @@ class ReceiptRepositoryTest {
 
     @Test
     void testAddReceipt_ThrowsAlreadyExistsException() throws AlreadyExistsException, ConstraintViolationException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
         List<ReceiptItem> items = new ArrayList<>();
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
-        Receipt receipt1 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
-        Receipt receipt2 = new Receipt(1L, cashier, LocalDateTime.now(), items, new BigDecimal("15.00"));
+        Receipt receipt1 = new Receipt(1L, store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt2 = new Receipt(1L, store, cashier, LocalDateTime.now(), items, new BigDecimal("15.00"));
 
         receiptRepository.addReceipt(receipt1);
 
@@ -99,8 +109,10 @@ class ReceiptRepositoryTest {
 
     @Test
     void testAddReceipt_ThrowsConstraintViolationException_NullCashier() {
+        Store store = createStore();
         List<ReceiptItem> items = new ArrayList<>();
         Receipt receipt = new Receipt(
+            store,
             null,
             LocalDateTime.now(),
             items,
@@ -112,8 +124,10 @@ class ReceiptRepositoryTest {
 
     @Test
     void testAddReceipt_ThrowsConstraintViolationException_NullItems() {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Receipt receipt = new Receipt(
+            store,
             cashier,
             LocalDateTime.now(),
             null,
@@ -125,9 +139,11 @@ class ReceiptRepositoryTest {
 
     @Test
     void testAddReceipt_ThrowsConstraintViolationException_NegativeTotalAmount() {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         List<ReceiptItem> items = new ArrayList<>();
         Receipt receipt = new Receipt(
+            store,
             cashier,
             LocalDateTime.now(),
             items,
@@ -139,13 +155,14 @@ class ReceiptRepositoryTest {
 
     @Test
     void testGetReceiptById_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
         List<ReceiptItem> items = new ArrayList<>();
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
-        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt = new Receipt(store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
         receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
@@ -173,6 +190,7 @@ class ReceiptRepositoryTest {
 
     @Test
     void testGetAllReceipts_Multiple() throws AlreadyExistsException, ConstraintViolationException {
+        Store store = createStore();
         Cashier cashier1 = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Cashier cashier2 = new Cashier(2L, "Jane Smith", new BigDecimal("3000.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
@@ -186,9 +204,9 @@ class ReceiptRepositoryTest {
         List<ReceiptItem> items3 = new ArrayList<>();
         items3.add(new ReceiptItem(product, 10, new BigDecimal("2.00")));
 
-        Receipt receipt1 = new Receipt(cashier1, LocalDateTime.now(), items1, new BigDecimal("10.00"));
-        Receipt receipt2 = new Receipt(cashier2, LocalDateTime.now(), items2, new BigDecimal("6.00"));
-        Receipt receipt3 = new Receipt(cashier1, LocalDateTime.now(), items3, new BigDecimal("20.00"));
+        Receipt receipt1 = new Receipt(store, cashier1, LocalDateTime.now(), items1, new BigDecimal("10.00"));
+        Receipt receipt2 = new Receipt(store, cashier2, LocalDateTime.now(), items2, new BigDecimal("6.00"));
+        Receipt receipt3 = new Receipt(store, cashier1, LocalDateTime.now(), items3, new BigDecimal("20.00"));
 
         receiptRepository.addReceipt(receipt1);
         receiptRepository.addReceipt(receipt2);
@@ -202,13 +220,14 @@ class ReceiptRepositoryTest {
 
     @Test
     void testUpdateReceipt_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
         List<ReceiptItem> items = new ArrayList<>();
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
-        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt = new Receipt(store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
         receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
@@ -217,6 +236,7 @@ class ReceiptRepositoryTest {
 
         Receipt updatedReceipt = new Receipt(
             receiptId,
+            store,
             cashier,
             LocalDateTime.now(),
             updatedItems,
@@ -230,38 +250,41 @@ class ReceiptRepositoryTest {
 
     @Test
     void testUpdateReceipt_ThrowsNotFoundException() {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         List<ReceiptItem> items = new ArrayList<>();
-        Receipt receipt = new Receipt(999L, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt = new Receipt(999L, store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
 
         assertThrows(NotFoundException.class, () -> receiptRepository.updateReceipt(receipt));
     }
 
     @Test
     void testUpdateReceipt_ThrowsConstraintViolationException() throws AlreadyExistsException, ConstraintViolationException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
         List<ReceiptItem> items = new ArrayList<>();
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
-        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt = new Receipt(store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
         receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
-        Receipt invalidUpdate = new Receipt(receiptId, cashier, LocalDateTime.now(), items, new BigDecimal("-5.00"));
+        Receipt invalidUpdate = new Receipt(receiptId, store, cashier, LocalDateTime.now(), items, new BigDecimal("-5.00"));
         assertThrows(ConstraintViolationException.class, () -> receiptRepository.updateReceipt(invalidUpdate));
     }
 
     @Test
     void testDeleteReceipt_Success() throws AlreadyExistsException, ConstraintViolationException, NotFoundException {
+        Store store = createStore();
         Cashier cashier = new Cashier(1L, "John Doe", new BigDecimal("2500.00"));
         Product product = new Product(1L, "Apple", new BigDecimal("1.50"), LocalDate.now().plusDays(30), ProductCategory.FOOD);
 
         List<ReceiptItem> items = new ArrayList<>();
         items.add(new ReceiptItem(product, 5, new BigDecimal("2.00")));
 
-        Receipt receipt = new Receipt(cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
+        Receipt receipt = new Receipt(store, cashier, LocalDateTime.now(), items, new BigDecimal("10.00"));
         receiptRepository.addReceipt(receipt);
         Long receiptId = receipt.getId();
 
