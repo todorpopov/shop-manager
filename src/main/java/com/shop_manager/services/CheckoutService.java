@@ -105,7 +105,7 @@ public class CheckoutService {
         return total;
     }
 
-    public void processCheckout(Cashier cashier) throws AlreadyExistsException, ConstraintViolationException, IOException {
+    public void processCheckout(Cashier cashier) throws RuntimeException, IOException {
         if (currentStore == null) {
             throw new IllegalStateException("No store selected");
         }
